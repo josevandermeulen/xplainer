@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Linear Equations</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Learn Linear Equations</h1>
+    <p>A linear equation describes a straight line in the form <code>y = m x + b</code>.</p>
+    <p>Adjust the slope (<code>m</code>) and intercept (<code>b</code>) and choose an <code>x</code> value to see the resulting <code>y</code>.</p>
+    <form id="calc-form">
+        <label>Slope (m): <input type="number" id="slope" value="1" step="any"></label><br>
+        <label>Intercept (b): <input type="number" id="intercept" value="0" step="any"></label><br>
+        <label>x: <input type="number" id="xvalue" value="0" step="any"></label><br>
+        <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+    <p id="result"></p>
+    <script src="script.js"></script>
+</body>
+</html>
