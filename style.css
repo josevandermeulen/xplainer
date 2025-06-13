@@ -2,7 +2,8 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    margin: 20px;
+    margin: 0; /* Enlève la marge par défaut du body pour que le header prenne toute la largeur */
+    padding: 0; /* Enlève le padding par défaut */
     background-color: #f4f4f4;
     color: #333;
     display: flex;
@@ -16,23 +17,44 @@ header {
     color: #ffffff;
     padding: 1rem 0;
     margin-bottom: 20px;
-    width: 100%;
+    width: 100%; /* Toute la largeur */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Centre le contenu du header */
 }
 
 header h1 {
-    margin: 0;
+    margin: 0 0 0.5rem 0; /* Ajoute une marge en bas pour espacer de la nav */
     font-size: 2em;
 }
+
+/* Styles pour la navigation entre les pages */
+nav.page-navigation {
+    margin-top: 10px;
+}
+
+nav.page-navigation a {
+    color: #fff;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+nav.page-navigation a:hover, nav.page-navigation a.active { /* Style pour lien actif si on l'implémente plus tard */
+    background-color: #2a5a75; /* Un bleu un peu plus foncé */
+}
+
 
 section {
     background: #fff;
     padding: 20px;
-    margin-bottom: 20px;
+    margin: 20px; /* Ajout de marge sur les côtés aussi */
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 800px; /* Limite la largeur pour une meilleure lisibilité */
+    width: calc(100% - 40px); /* Prend en compte les marges */
+    max-width: 800px;
 }
 
 h2 {
@@ -60,8 +82,8 @@ h2 {
     width: 70px;
 }
 
-/* Styles pour les boutons */
-.controls button, #findEquationSection button {
+/* Styles pour les boutons (générique pour tous les boutons d'action) */
+.controls button, #interactive-parabola button {
     padding: 10px 15px;
     color: white;
     border: none;
@@ -71,7 +93,7 @@ h2 {
     transition: background-color 0.3s ease;
 }
 
-/* Nouveau bouton "Dessiner la droite" (section 1) */
+/* Bouton "Dessiner la droite" (page index.html) */
 #drawUserLineButton {
     background-color: #5cb85c; /* Vert */
 }
@@ -79,7 +101,7 @@ h2 {
     background-color: #4cae4c;
 }
 
-/* Nouveau bouton "Tout effacer" (section 1) */
+/* Bouton "Tout effacer" (page index.html) */
 #clearLinesButton {
     background-color: #d9534f; /* Rouge */
 }
@@ -87,24 +109,53 @@ h2 {
     background-color: #c9302c;
 }
 
-/* Styles pour les DEUX canvas */
-#linesGraphCanvas { /* Le canvas des lignes garde un curseur par défaut */
-    border: 2px solid #333;
-    background-color: #ffffff;
-    display: block;
-    margin: 0 auto 20px auto;
-    cursor: default;
+/* Bouton "Analyser et Dessiner la Parabole" (page second_degre.html) */
+#analyzeButton {
+    background-color: #5bc0de; /* Bleu info */
 }
-#pointsGraphCanvas { /* Le canvas des points a un curseur en croix */
-    border: 2px solid #333;
-    background-color: #ffffff;
-    display: block;
-    margin: 0 auto 20px auto;
-    cursor: crosshair; /* Curseur indiquant la possibilité de cliquer pour sélectionner */
+#analyzeButton:hover {
+    background-color: #31b0d5;
 }
 
 
-/* Styles pour la liste des équations affichées (section 1) */
+/* Styles pour les canvas */
+#linesGraphCanvas, #pointsGraphCanvas, #parabolaCanvas {
+    border: 2px solid #333;
+    background-color: #ffffff;
+    display: block;
+    margin: 20px auto; /* Marge en haut/bas et centrage auto horizontal */
+}
+#pointsGraphCanvas {
+    cursor: crosshair;
+}
+
+/* Section des résultats pour la parabole */
+#algebraicResults {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    text-align: left;
+}
+#algebraicResults h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #3a7ca5;
+    font-size: 1.2em;
+}
+#algebraicResults div { /* Style pour chaque sous-div de résultat */
+    margin-bottom: 8px;
+    line-height: 1.5;
+    font-family: 'Courier New', Courier, monospace;
+}
+#algebraicResults strong { /* Pour mettre en évidence les termes comme y, x², x, etc. */
+    font-weight: bold;
+    color: #333;
+}
+
+
+/* Styles pour la liste des équations affichées (page index.html) */
 #equationsListContainer {
     margin-top: 15px;
     padding: 10px;
@@ -131,11 +182,10 @@ h2 {
     border-bottom: none;
 }
 
-/* Styles pour la section "Trouver l'équation à partir de deux points" (section 2) */
-#findEquationSection p { /* Paragraphe d'instruction */
+/* Styles pour la section "Trouver l'équation à partir de deux points" (page index.html) */
+#findEquationSection p {
     margin-bottom: 15px;
 }
-
 #pointsEquationResultContainer {
     margin-top: 15px;
     padding: 15px;
@@ -165,19 +215,22 @@ h2 {
 
 footer {
     margin-top: 30px;
-    padding: 10px 0;
+    padding: 20px 0; /* Plus de padding pour le footer */
     color: #777;
     font-size: 0.9em;
     width: 100%;
     text-align: center;
+    background-color: #e9ecef; /* Fond léger pour le footer */
+    border-top: 1px solid #ddd; /* Ligne de séparation */
 }
 
-#introduction ul {
+#introduction ul, #introduction-second-degre ul { /* S'applique aux listes des deux pages */
     text-align: left;
-    display: inline-block;
+    display: inline-block; /* Pour centrer le bloc ul */
     margin-top: 10px;
     margin-bottom: 10px;
+    padding-left: 20px; /* Ajoute un peu de padding pour les puces */
 }
-#introduction ul li {
-    margin-bottom: 5px;
+#introduction ul li, #introduction-second-degre ul li {
+    margin-bottom: 8px; /* Espace entre les items de la liste */
 }
