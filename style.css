@@ -1,0 +1,102 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+header {
+    background-color: #3a7ca5;
+    color: #ffffff;
+    padding: 1rem 0;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+section {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px; /* Limite la largeur pour une meilleure lisibilité */
+}
+
+h2 {
+    color: #3a7ca5; /* Couleur assortie à l'en-tête */
+    margin-top: 0;
+}
+
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px; /* Espace entre les éléments */
+    align-items: center; /* Alignement vertical des labels et inputs */
+    justify-content: center; /* Centrage horizontal des contrôles */
+    flex-wrap: wrap; /* Permet le passage à la ligne si pas assez de place */
+}
+
+.controls label {
+    font-weight: bold;
+}
+
+.controls input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 80px; /* Largeur fixe pour les inputs numériques */
+}
+
+.controls button {
+    padding: 10px 15px;
+    background-color: #87c38f; /* Vert doux */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.controls button:hover {
+    background-color: #6aa271; /* Vert un peu plus foncé au survol */
+}
+
+#graphCanvas {
+    border: 2px solid #333;
+    background-color: #ffffff; /* Fond blanc pour le canvas */
+    display: block; /* Assure qu'il prend toute la largeur assignée et permet le margin auto */
+    margin: 0 auto; /* Centre le canvas s'il est plus petit que la section */
+}
+
+footer {
+    margin-top: 30px;
+    padding: 10px 0;
+    color: #777;
+    font-size: 0.9em;
+    width: 100%;
+    text-align: center;
+}
+
+/* Styles pour une meilleure présentation des listes dans l'introduction */
+#introduction ul {
+    text-align: left; /* Aligne le texte de la liste à gauche pour une meilleure lisibilité */
+    display: inline-block; /* Permet de centrer le bloc de la liste */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#introduction ul li {
+    margin-bottom: 5px; /* Espace entre les items de la liste */
+}
