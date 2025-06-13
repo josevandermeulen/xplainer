@@ -30,8 +30,8 @@
     </section>
 
     <section id="interactive-graph">
-        <h2>Joue avec les droites !</h2>
-        <p>Modifie les valeurs de 'a' et 'b' ci-dessous, puis clique sur un des boutons pour voir le résultat.</p>
+        <h2>Joue avec les droites ! (y = ax + b)</h2>
+        <p>Modifie les valeurs de 'a' et 'b' ci-dessous, puis clique sur "Dessiner la droite" pour l'ajouter au graphique. Utilise "Tout effacer" pour nettoyer.</p>
 
         <div class="controls">
             <label for="valeurA">Pente (a) :</label>
@@ -40,15 +40,15 @@
             <label for="valeurB">Ordonnée à l'origine (b) :</label>
             <input type="number" id="valeurB" value="0" step="any">
 
-            <button id="redrawButton">Effacer et Dessiner</button>
-            <button id="addButton">Ajouter une droite</button>
+            <button id="drawUserLineButton">Dessiner la droite</button>
+            <button id="clearLinesButton">Tout effacer</button>
         </div>
 
-        <canvas id="graphCanvas" width="600" height="400">
+        <canvas id="linesGraphCanvas" width="600" height="400">
             Votre navigateur ne supporte pas l'élément canvas.
         </canvas>
 
-        <div id="equationsListContainer"> <!-- Ajout d'un conteneur pour mieux gérer le style si besoin -->
+        <div id="equationsListContainer">
             <h4>Équations affichées :</h4>
             <ul id="equationsList">
                 <!-- Les équations seront ajoutées ici par JavaScript -->
@@ -58,10 +58,15 @@
 
     <section id="findEquationSection">
         <h2>Trouver l'équation d'une droite à partir de deux points</h2>
-        <p>Cliquez sur le graphique ci-dessus pour définir deux points. L'équation de la droite passant par ces points sera calculée et affichée ici.</p>
+        <p>Cliquez sur le graphique dédié ci-dessous pour définir deux points. L'équation de la droite passant par ces points sera calculée et affichée ici.</p>
+
+        <canvas id="pointsGraphCanvas" width="600" height="400">
+            Votre navigateur ne supporte pas l'élément canvas.
+        </canvas>
+
         <button id="startPointsButton">Commencer la sélection des points</button>
 
-        <div id="pointsEquationResultContainer"> <!-- Ajout d'un conteneur -->
+        <div id="pointsEquationResultContainer">
             <h4>Équation et calcul :</h4>
             <div id="pointsEquationResult">
                 <!-- L'équation calculée et l'explication apparaîtront ici -->

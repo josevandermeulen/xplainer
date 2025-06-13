@@ -1,97 +1,105 @@
-// Attend que le DOM soit entièrement chargé
 document.addEventListener('DOMContentLoaded', () => {
-    // Récupération des éléments HTML
-    const canvas = document.getElementById('graphCanvas');
-    const ctx = canvas.getContext('2d');
+    // --- ÉLÉMENTS DU DOM ---
+    // Section 1: Joue avec les droites (y = ax + b)
+    const linesCanvas = document.getElementById('linesGraphCanvas');
+    const linesCtx = linesCanvas.getContext('2d');
     const valeurAInput = document.getElementById('valeurA');
     const valeurBInput = document.getElementById('valeurB');
-    const redrawButton = document.getElementById('redrawButton'); // anciennement drawButton
-    const addButton = document.getElementById('addButton');
-    const equationsListUL = document.getElementById('equationsList'); // UL pour les équations
+    const drawUserLineButton = document.getElementById('drawUserLineButton');
+    const clearLinesButton = document.getElementById('clearLinesButton');
+    const equationsListUL = document.getElementById('equationsList');
 
+    // Section 2: Trouver l'équation à partir de deux points
+    const pointsCanvas = document.getElementById('pointsGraphCanvas');
+    const pointsCtx = pointsCanvas.getContext('2d');
     const startPointsButton = document.getElementById('startPointsButton');
     const pointsEquationResultDiv = document.getElementById('pointsEquationResult');
 
-    // Dimensions du canvas
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
-
-    // Centre du repère (origine)
+    // --- CONFIGURATION COMMUNE DES CANVAS ---
+    const canvasWidth = linesCanvas.width; // Supposons que les deux canvas ont la même taille
+    const canvasHeight = linesCanvas.height;
+    const scale = 30; // Pixels par unité
     const originX = canvasWidth / 2;
     const originY = canvasHeight / 2;
-    const scale = 30; // Pixels par unité
 
-    // Stockage pour les droites multiples
-    let drawnLines = []; // Tableau pour stocker les objets {a, b, color}
-    const lineColors = ['blue', 'red', 'green', 'purple', 'orange', 'brown'];
+    // --- VARIABLES SPÉCIFIQUES AU CANVAS 1 (linesGraphCanvas) ---
+    let drawnLines = []; // {a, b, color}
+    const lineColors = ['blue', 'red', 'green', 'purple', 'orange', 'brown', 'teal', 'magenta'];
     let colorIndex = 0;
 
-    // Variables pour la sélection de deux points
+    // --- VARIABLES SPÉCIFIQUES AU CANVAS 2 (pointsGraphCanvas) ---
     let selectingPointsMode = false;
-    let selectedPoints = []; // Stocke les points {x, y} en coordonnées du graphique
+    let selectedPoints = []; // {x, y} en coordonnées du graphique
 
-    // --- FONCTIONS DE BASE DU GRAPHIQUE ---
-
-    function clearCanvas() {
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    // --- FONCTIONS DE DESSIN GÉNÉRIQUES ---
+    function clearCanvasCtx(ctx) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
 
-    function drawAxes() {
+    function drawAxes(ctx) {
+        const width = ctx.canvas.width;
+        const height = ctx.canvas.height;
+        const oX = width / 2;
+        const oY = height / 2;
+
         ctx.beginPath();
-        ctx.strokeStyle = '#333'; // Couleur plus neutre pour les axes
+        ctx.strokeStyle = '#333';
         ctx.lineWidth = 1;
 
         // Axe X
-        ctx.moveTo(0, originY);
-        ctx.lineTo(canvasWidth, originY);
-        ctx.moveTo(canvasWidth - 10, originY - 5);
-        ctx.lineTo(canvasWidth, originY);
-        ctx.lineTo(canvasWidth - 10, originY + 5);
+        ctx.moveTo(0, oY);
+        ctx.lineTo(width, oY);
+        ctx.moveTo(width - 10, oY - 5);
+        ctx.lineTo(width, oY);
+        ctx.lineTo(width - 10, oY + 5);
 
         // Axe Y
-        ctx.moveTo(originX, 0);
-        ctx.lineTo(originX, canvasHeight);
-        ctx.moveTo(originX - 5, 10);
-        ctx.lineTo(originX, 0);
-        ctx.lineTo(originX + 5, 10);
+        ctx.moveTo(oX, 0);
+        ctx.lineTo(oX, height);
+        ctx.moveTo(oX - 5, 10);
+        ctx.lineTo(oX, 0);
+        ctx.lineTo(oX + 5, 10);
 
         ctx.font = '12px Arial';
         ctx.fillStyle = '#333';
-        ctx.fillText('X', canvasWidth - 15, originY - 10);
-        ctx.fillText('Y', originX + 10, 15);
-        ctx.fillText('0', originX + 5, originY + 15);
+        ctx.fillText('X', width - 15, oY - 10);
+        ctx.fillText('Y', oX + 10, 15);
+        ctx.fillText('0', oX + 5, oY + 15);
 
         // Graduations
-        ctx.strokeStyle = '#ccc'; // Couleur plus légère pour les graduations
+        ctx.strokeStyle = '#ccc';
         // Axe X
-        for (let x = -Math.floor(originX / scale); x <= Math.floor((canvasWidth - originX) / scale); x++) {
+        for (let x = -Math.floor(oX / scale); x <= Math.floor((width - oX) / scale); x++) {
             if (x === 0) continue;
-            const pixelX = originX + x * scale;
-            ctx.moveTo(pixelX, originY - 3);
-            ctx.lineTo(pixelX, originY + 3);
-            if (x % 2 === 0) ctx.fillText(x.toString(), pixelX - (x < 0 ? 8 : 4), originY + 15);
+            const pixelX = oX + x * scale;
+            ctx.moveTo(pixelX, oY - 3);
+            ctx.lineTo(pixelX, oY + 3);
+            if (x % 2 === 0) ctx.fillText(x.toString(), pixelX - (x < 0 ? 8 : 4), oY + 15);
         }
         // Axe Y
-        for (let y = -Math.floor(originY / scale); y <= Math.floor((canvasHeight - originY) / scale); y++) {
+        for (let y = -Math.floor(oY / scale); y <= Math.floor((height - oY) / scale); y++) {
             if (y === 0) continue;
-            const pixelY = originY - y * scale;
-            ctx.moveTo(originX - 3, pixelY);
-            ctx.lineTo(originX + 3, pixelY);
-            if (y % 2 === 0) ctx.fillText(y.toString(), originX - 15 - (y < 0 ? 5 : 0), pixelY + 4);
+            const pixelY = oY - y * scale;
+            ctx.moveTo(oX - 3, pixelY);
+            ctx.lineTo(oX + 3, pixelY);
+            if (y % 2 === 0) ctx.fillText(y.toString(), oX - 15 - (y < 0 ? 5 : 0), pixelY + 4);
         }
-        ctx.stroke(); // Dessine tout (axes et graduations)
+        ctx.stroke();
     }
 
-    // Fonction pour dessiner UNE équation y = ax + b
-    function drawSingleLine(a, b, color = 'blue') {
+    function drawSingleLine(ctx, a, b, color = 'blue') {
+        const width = ctx.canvas.width;
+        const oX = width / 2;
+        const oY = ctx.canvas.height / 2;
+
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
         let firstPoint = true;
-        for (let pixelX = 0; pixelX < canvasWidth; pixelX++) {
-            const graphX = (pixelX - originX) / scale;
+        for (let pixelX = 0; pixelX < width; pixelX++) {
+            const graphX = (pixelX - oX) / scale;
             const graphY = a * graphX + b;
-            const pixelY = originY - (graphY * scale);
+            const pixelY = oY - (graphY * scale);
             if (firstPoint) {
                 ctx.moveTo(pixelX, pixelY);
                 firstPoint = false;
@@ -102,194 +110,175 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.stroke();
     }
 
-    // Fonction pour dessiner un point sur le graphique (utilisé pour la sélection)
-    function drawPoint(graphX, graphY, color = 'red', radius = 5) {
-        const pixelX = originX + graphX * scale;
-        const pixelY = originY - graphY * scale;
+    function drawPoint(ctx, graphX, graphY, color = 'red', radius = 5) {
+        const oX = ctx.canvas.width / 2;
+        const oY = ctx.canvas.height / 2;
+        const pixelX = oX + graphX * scale;
+        const pixelY = oY - graphY * scale;
         ctx.beginPath();
         ctx.arc(pixelX, pixelY, radius, 0, 2 * Math.PI, false);
         ctx.fillStyle = color;
         ctx.fill();
     }
 
-
-    // --- GESTION DE PLUSIEURS DROITES ---
-
-    function addLineToList(a, b, color) {
+    // --- LOGIQUE POUR CANVAS 1 (linesGraphCanvas) ---
+    function addLineToEquationList(a, b, color) {
         const listItem = document.createElement('li');
         listItem.textContent = `y = ${a}x + ${b}`;
-        listItem.style.color = color; // Applique la couleur aussi au texte
+        listItem.style.color = color;
         equationsListUL.appendChild(listItem);
     }
 
-    function redrawAllLines() {
-        clearCanvas();
-        drawAxes();
+    function redrawLinesOnCanvas1() {
+        clearCanvasCtx(linesCtx);
+        drawAxes(linesCtx);
         drawnLines.forEach(line => {
-            drawSingleLine(line.a, line.b, line.color);
+            drawSingleLine(linesCtx, line.a, line.b, line.color);
         });
-        // Redessiner les points sélectionnés s'il y en a
-        selectedPoints.forEach(p => drawPoint(p.x, p.y));
+        updateEquationsListDisplay();
     }
 
-    function updateEquationsDisplay() {
-        equationsListUL.innerHTML = ''; // Vide la liste
+    function updateEquationsListDisplay() {
+        equationsListUL.innerHTML = '';
         drawnLines.forEach(line => {
-            addLineToList(line.a, line.b, line.color);
+            addLineToEquationList(line.a, line.b, line.color);
         });
     }
 
-    redrawButton.addEventListener('click', () => {
+    drawUserLineButton.addEventListener('click', () => {
         const a = parseFloat(valeurAInput.value);
         const b = parseFloat(valeurBInput.value);
         if (isNaN(a) || isNaN(b)) {
             alert("Veuillez entrer des valeurs numériques valides pour 'a' et 'b'.");
             return;
         }
-
-        drawnLines = []; // Efface les anciennes droites
-        const color = lineColors[colorIndex % lineColors.length];
-        drawnLines.push({ a, b, color });
-        // colorIndex++; // On ne l'incrémente que si on garde la ligne
-
-        redrawAllLines();
-        updateEquationsDisplay();
-        // Réinitialise l'index de couleur si on efface tout
-        colorIndex = 0;
-        drawnLines.find(line => line.a ===a && line.b ===b).color = lineColors[colorIndex % lineColors.length]; // Assigne la première couleur
-        colorIndex++; // Prépare pour la prochaine *ajoutée*
-        updateEquationsDisplay(); // Met à jour pour afficher la couleur
-    });
-
-    addButton.addEventListener('click', () => {
-        const a = parseFloat(valeurAInput.value);
-        const b = parseFloat(valeurBInput.value);
-        if (isNaN(a) || isNaN(b)) {
-            alert("Veuillez entrer des valeurs numériques valides pour 'a' et 'b'.");
-            return;
-        }
-
-        // Vérifier si la ligne existe déjà pour éviter les doublons exacts
         const existingLine = drawnLines.find(line => line.a === a && line.b === b);
         if (existingLine) {
-            alert("Cette droite est déjà dessinée.");
+            alert("Cette droite est déjà dessinée. Modifiez 'a' ou 'b' ou effacez le graphique.");
             return;
         }
-
         const color = lineColors[colorIndex % lineColors.length];
         drawnLines.push({ a, b, color });
         colorIndex++;
-
-        redrawAllLines(); // Redessine tout, y compris la nouvelle ligne
-        updateEquationsDisplay();
+        redrawLinesOnCanvas1();
     });
 
-    // --- TROUVER L'ÉQUATION À PARTIR DE DEUX POINTS ---
+    clearLinesButton.addEventListener('click', () => {
+        drawnLines = [];
+        colorIndex = 0;
+        redrawLinesOnCanvas1(); // Redessine juste les axes et vide la liste
+    });
 
+    // --- LOGIQUE POUR CANVAS 2 (pointsGraphCanvas) ---
     startPointsButton.addEventListener('click', () => {
-        selectingPointsMode = !selectingPointsMode; // Bascule le mode
+        selectingPointsMode = !selectingPointsMode;
         if (selectingPointsMode) {
             startPointsButton.textContent = "Arrêter la sélection";
             startPointsButton.classList.add('active');
-            canvas.style.cursor = 'crosshair';
-            selectedPoints = []; // Réinitialise les points à chaque démarrage
+            pointsCanvas.classList.add('crosshair-cursor');
+            selectedPoints = [];
+            clearCanvasCtx(pointsCtx); // Efface le canvas des points
+            drawAxes(pointsCtx);       // Redessine les axes
             pointsEquationResultDiv.innerHTML = "<p>Cliquez sur le graphique pour choisir le premier point.</p>";
-            redrawAllLines(); // Efface les anciens points dessinés mais garde les droites
         } else {
             startPointsButton.textContent = "Commencer la sélection des points";
             startPointsButton.classList.remove('active');
-            canvas.style.cursor = 'default';
-            pointsEquationResultDiv.innerHTML = ""; // Vide les résultats précédents
-            redrawAllLines(); // Redessine pour enlever les points potentiels si arrêt avant 2 points
+            pointsCanvas.classList.remove('crosshair-cursor');
+            // Ne pas effacer le résultat ici, l'utilisateur pourrait vouloir le voir
         }
     });
 
-    canvas.addEventListener('click', (event) => {
+    pointsCanvas.addEventListener('click', (event) => {
         if (!selectingPointsMode) return;
 
-        const rect = canvas.getBoundingClientRect();
+        const rect = pointsCanvas.getBoundingClientRect();
         const pixelX = event.clientX - rect.left;
         const pixelY = event.clientY - rect.top;
 
-        // Convertir les coordonnées pixel en coordonnées du graphique
-        const graphX = parseFloat(((pixelX - originX) / scale).toFixed(2)); // Arrondi pour la propreté
-        const graphY = parseFloat(((originY - pixelY) / scale).toFixed(2)); // Arrondi
+        const oX = pointsCanvas.width / 2;
+        const oY = pointsCanvas.height / 2;
+        const graphX = parseFloat(((pixelX - oX) / scale).toFixed(2));
+        const graphY = parseFloat(((oY - pixelY) / scale).toFixed(2));
 
         selectedPoints.push({ x: graphX, y: graphY });
-        drawPoint(graphX, graphY); // Dessine le point cliqué
+        // Efface et redessine les axes et les points pour éviter de dessiner sur l'ancienne ligne calculée
+        clearCanvasCtx(pointsCtx);
+        drawAxes(pointsCtx);
+        selectedPoints.forEach(p => drawPoint(pointsCtx, p.x, p.y));
+
 
         if (selectedPoints.length === 1) {
-            pointsEquationResultDiv.innerHTML = `<p>Premier point sélectionné : (x: ${graphX}, y: ${graphY}).</p><p>Cliquez pour choisir le deuxième point.</p>`;
+            pointsEquationResultDiv.innerHTML = `<p>Premier point : (x: ${graphX}, y: ${graphY}). Cliquez pour le deuxième point.</p>`;
         } else if (selectedPoints.length === 2) {
             const [p1, p2] = selectedPoints;
-            pointsEquationResultDiv.innerHTML = `<p>Points sélectionnés : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`;
-
-            calculateAndDisplayEquation(p1, p2);
-
-            // Quitter le mode sélection après avoir trouvé l'équation
-            selectingPointsMode = false;
+            calculateAndDisplayEquationOnCanvas2(p1, p2);
+            selectingPointsMode = false; // Quitte le mode sélection
             startPointsButton.textContent = "Commencer la sélection des points";
             startPointsButton.classList.remove('active');
-            canvas.style.cursor = 'default';
+            pointsCanvas.classList.remove('crosshair-cursor');
         }
     });
 
-    function calculateAndDisplayEquation(p1, p2) {
+    function calculateAndDisplayEquationOnCanvas2(p1, p2) {
         let equationText = "";
         let stepsText = "";
+        let lineA, lineB; // Pour stocker a et b pour le dessin
 
-        if (p1.x === p2.x) { // Droite verticale
+        // On ne vide plus pointsEquationResultDiv ici pour garder les coordonnées des points
+        // mais on s'assure de ne pas dupliquer le contenu si l'utilisateur reclique rapidement.
+        // Une approche plus robuste serait de séparer l'affichage des points de celui de l'équation.
+        let baseInfo = `<p>Points : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`;
+
+
+        if (p1.x === p2.x) {
             equationText = `<span class="equation">x = ${p1.x}</span>`;
-            stepsText = `<div class="steps">Les deux points ont la même abscisse (x = ${p1.x}).<br>C'est une droite verticale. Son équation est x = constante.</div>`;
-            // Dessiner la droite verticale
-            ctx.beginPath();
-            ctx.strokeStyle = 'purple'; // Couleur distincte
-            ctx.lineWidth = 2;
-            ctx.moveTo(originX + p1.x * scale, 0);
-            ctx.lineTo(originX + p1.x * scale, canvasHeight);
-            ctx.stroke();
+            stepsText = `<div class="steps">Les deux points ont la même abscisse (x = ${p1.x}). C'est une droite verticale.</div>`;
+            // Pour dessiner une droite verticale, on ne peut pas utiliser drawSingleLine directement
+            // On la dessine manuellement ici
+            pointsCtx.beginPath();
+            pointsCtx.strokeStyle = 'purple';
+            pointsCtx.lineWidth = 2;
+            const canvasP1X = pointsCtx.canvas.width/2 + p1.x * scale;
+            pointsCtx.moveTo(canvasP1X, 0);
+            pointsCtx.lineTo(canvasP1X, pointsCtx.canvas.height);
+            pointsCtx.stroke();
         } else {
-            // Calcul de la pente 'a'
-            const a = (p2.y - p1.y) / (p2.x - p1.x);
-            // Calcul de l'ordonnée à l'origine 'b'
-            const b = p1.y - a * p1.x;
-
-            const a_rounded = parseFloat(a.toFixed(3));
-            const b_rounded = parseFloat(b.toFixed(3));
-
-            equationText = `<span class="equation">y = ${a_rounded}x + ${b_rounded}</span>`;
+            lineA = (p2.y - p1.y) / (p2.x - p1.x);
+            lineB = p1.y - lineA * p1.x;
+            const a_rounded = parseFloat(lineA.toFixed(3));
+            const b_rounded = parseFloat(lineB.toFixed(3));
+            equationText = `<span class="equation">y = ${a_rounded}x ${b_rounded < 0 ? '-' : '+'} ${Math.abs(b_rounded)}</span>`;
             stepsText = `<div class="steps">
-                1. Calcul de la pente (a) :<br>
-                   a = (y2 - y1) / (x2 - x1)<br>
-                   a = (${p2.y} - ${p1.y}) / (${p2.x} - ${p1.x})<br>
-                   a = ${a_rounded}<br><br>
-                2. Calcul de l'ordonnée à l'origine (b) :<br>
-                   b = y1 - a * x1<br>
-                   b = ${p1.y} - (${a_rounded} * ${p1.x})<br>
-                   b = ${b_rounded}<br>
+                1. Pente (a) = (y2 - y1) / (x2 - x1) = (${p2.y} - ${p1.y}) / (${p2.x} - ${p1.x}) = ${a_rounded}<br>
+                2. Ordonnée à l'origine (b) = y1 - a * x1 = ${p1.y} - (${a_rounded} * ${p1.x}) = ${b_rounded}
             </div>`;
-
-            // Dessiner la droite calculée
-            drawSingleLine(a, b, 'purple'); // Couleur distincte pour cette droite
+            drawSingleLine(pointsCtx, lineA, lineB, 'purple');
         }
-        pointsEquationResultDiv.innerHTML += equationText + stepsText;
+        pointsEquationResultDiv.innerHTML = baseInfo + equationText + stepsText;
     }
 
     // --- INITIALISATION ---
     function init() {
-        clearCanvas();
-        drawAxes();
-        // Optionnel: dessiner une droite par défaut au chargement
-        const initialA = parseFloat(valeurAInput.value);
-        const initialB = parseFloat(valeurBInput.value);
-        if (!isNaN(initialA) && !isNaN(initialB)) {
-            const initialColor = lineColors[colorIndex % lineColors.length];
-            drawnLines.push({ a: initialA, b: initialB, color: initialColor });
-            colorIndex++;
-            redrawAllLines();
-            updateEquationsDisplay();
-        }
+        // Canvas 1 (linesGraphCanvas)
+        clearCanvasCtx(linesCtx);
+        drawAxes(linesCtx);
+        // Dé-commenter pour une droite par défaut au chargement pour linesGraphCanvas
+        // const initialA = parseFloat(valeurAInput.value);
+        // const initialB = parseFloat(valeurBInput.value);
+        // if (!isNaN(initialA) && !isNaN(initialB)) {
+        //     const initialColor = lineColors[colorIndex % lineColors.length];
+        //     drawnLines.push({ a: initialA, b: initialB, color: initialColor });
+        //     colorIndex++;
+        //     redrawLinesOnCanvas1();
+        // } else {
+        //     updateEquationsListDisplay(); // Assure que la liste est vide si pas de droite initiale
+        // }
+
+
+        // Canvas 2 (pointsGraphCanvas)
+        clearCanvasCtx(pointsCtx);
+        drawAxes(pointsCtx);
     }
 
-    init(); // Appel initial pour dessiner le repère et la droite par défaut
+    init();
 });

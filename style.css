@@ -32,7 +32,7 @@ section {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 80%;
-    max-width: 800px;
+    max-width: 800px; /* Limite la largeur pour une meilleure lisibilité */
 }
 
 h2 {
@@ -43,7 +43,7 @@ h2 {
 .controls {
     margin-bottom: 20px;
     display: flex;
-    gap: 10px; /* Réduit légèrement pour plus de boutons */
+    gap: 10px;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
@@ -57,97 +57,94 @@ h2 {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 70px; /* Légèrement réduit si besoin */
+    width: 70px;
 }
 
-/* Ajustement des styles des boutons existants et ajout pour les nouveaux */
+/* Styles pour les boutons */
 .controls button, #findEquationSection button {
     padding: 10px 15px;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.95em; /* Légèrement ajusté pour uniformité */
+    font-size: 0.95em;
     transition: background-color 0.3s ease;
 }
 
-/* Style spécifique pour le bouton "Effacer et Dessiner" (anciennement drawButton) */
-#redrawButton {
-    background-color: #d9534f; /* Rouge pour action destructive/reset */
+/* Nouveau bouton "Dessiner la droite" (section 1) */
+#drawUserLineButton {
+    background-color: #5cb85c; /* Vert */
 }
-#redrawButton:hover {
-    background-color: #c9302c;
-}
-
-/* Style spécifique pour le bouton "Ajouter une droite" */
-#addButton {
-    background-color: #5cb85c; /* Vert pour action d'ajout */
-}
-#addButton:hover {
+#drawUserLineButton:hover {
     background-color: #4cae4c;
 }
 
-/* Style pour le bouton "Commencer la sélection des points" */
+/* Nouveau bouton "Tout effacer" (section 1) */
+#clearLinesButton {
+    background-color: #d9534f; /* Rouge */
+}
+#clearLinesButton:hover {
+    background-color: #c9302c;
+}
+
+/* Bouton "Commencer la sélection des points" (section 2) */
 #startPointsButton {
-    background-color: #f0ad4e; /* Orange pour action initiant un mode */
-    margin-bottom: 15px; /* Espace avant la zone de résultat */
+    background-color: #f0ad4e; /* Orange */
+    margin-bottom: 15px;
 }
 #startPointsButton:hover {
     background-color: #ec971f;
 }
-/* Style pour le bouton "Commencer la sélection des points" lorsqu'il est actif (mode sélection) */
-#startPointsButton.active {
+#startPointsButton.active { /* Style quand le mode sélection est actif */
     background-color: #ec971f;
-    box-shadow: 0 0 5px #ec971f;
+    box-shadow: 0 0 8px #da8c10;
     font-weight: bold;
 }
 
-
-#graphCanvas {
+/* Styles pour les DEUX canvas */
+#linesGraphCanvas, #pointsGraphCanvas {
     border: 2px solid #333;
     background-color: #ffffff;
     display: block;
-    margin: 0 auto 20px auto; /* Ajoute un margin-bottom pour espacer de la liste d'équations */
-    cursor: default; /* Curseur par défaut, sera changé par JS en mode sélection de points */
+    margin: 0 auto 20px auto; /* Centre et ajoute marge en bas */
+    cursor: default;
 }
 
-/* Styles pour la liste des équations affichées */
+/* Spécificité pour le curseur du canvas de sélection de points (sera géré par JS) */
+#pointsGraphCanvas.crosshair-cursor {
+    cursor: crosshair;
+}
+
+
+/* Styles pour la liste des équations affichées (section 1) */
 #equationsListContainer {
     margin-top: 15px;
     padding: 10px;
-    background-color: #e9ecef; /* Fond légèrement différent */
+    background-color: #e9ecef;
     border-radius: 4px;
     text-align: left;
 }
-
 #equationsListContainer h4 {
     margin-top: 0;
     margin-bottom: 10px;
     color: #333;
 }
-
 #equationsList {
-    list-style-type: none; /* Enlève les puces par défaut */
+    list-style-type: none;
     padding-left: 0;
     margin-bottom: 0;
 }
-
 #equationsList li {
     padding: 5px 0;
-    border-bottom: 1px solid #ddd; /* Séparateur entre les équations */
-    font-family: 'Courier New', Courier, monospace; /* Police pour les équations */
+    border-bottom: 1px solid #ddd;
+    font-family: 'Courier New', Courier, monospace;
 }
-
 #equationsList li:last-child {
-    border-bottom: none; /* Pas de bordure pour le dernier élément */
+    border-bottom: none;
 }
 
-/* Styles pour la section "Trouver l'équation à partir de deux points" */
-#findEquationSection {
-    /* Les styles généraux de 'section' s'appliquent déjà */
-}
-
-#findEquationSection p {
+/* Styles pour la section "Trouver l'équation à partir de deux points" (section 2) */
+#findEquationSection p { /* Paragraphe d'instruction */
     margin-bottom: 15px;
 }
 
@@ -158,30 +155,25 @@ h2 {
     border-radius: 4px;
     text-align: left;
 }
-
 #pointsEquationResultContainer h4 {
     margin-top: 0;
     margin-bottom: 10px;
     color: #333;
 }
-
 #pointsEquationResult {
     font-family: 'Courier New', Courier, monospace;
-    line-height: 1.8; /* Plus d'espace pour les explications */
+    line-height: 1.8;
 }
-
-#pointsEquationResult .equation { /* Classe pour styler spécifiquement la ligne de l'équation */
+#pointsEquationResult .equation {
     font-weight: bold;
-    color: #3a7ca5; /* Bleu assorti */
+    color: #3a7ca5;
     margin-bottom: 10px;
     display: block;
 }
-
-#pointsEquationResult .steps { /* Classe pour styler les étapes de calcul */
+#pointsEquationResult .steps {
     font-size: 0.9em;
     color: #555;
 }
-
 
 footer {
     margin-top: 30px;
@@ -192,14 +184,12 @@ footer {
     text-align: center;
 }
 
-/* Styles pour une meilleure présentation des listes dans l'introduction */
 #introduction ul {
     text-align: left;
     display: inline-block;
     margin-top: 10px;
     margin-bottom: 10px;
 }
-
 #introduction ul li {
     margin-bottom: 5px;
 }
