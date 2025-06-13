@@ -12,24 +12,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Section 2: Trouver l'équation à partir de deux points
     const pointsCanvas = document.getElementById('pointsGraphCanvas');
     const pointsCtx = pointsCanvas.getContext('2d');
-    const startPointsButton = document.getElementById('startPointsButton');
+    // Le bouton startPointsButton a été supprimé du HTML et du JS
     const pointsEquationResultDiv = document.getElementById('pointsEquationResult');
 
     // --- CONFIGURATION COMMUNE DES CANVAS ---
-    const canvasWidth = linesCanvas.width; // Supposons que les deux canvas ont la même taille
+    const canvasWidth = linesCanvas.width;
     const canvasHeight = linesCanvas.height;
-    const scale = 30; // Pixels par unité
+    const scale = 30;
     const originX = canvasWidth / 2;
     const originY = canvasHeight / 2;
 
     // --- VARIABLES SPÉCIFIQUES AU CANVAS 1 (linesGraphCanvas) ---
-    let drawnLines = []; // {a, b, color}
+    let drawnLines = [];
     const lineColors = ['blue', 'red', 'green', 'purple', 'orange', 'brown', 'teal', 'magenta'];
     let colorIndex = 0;
 
     // --- VARIABLES SPÉCIFIQUES AU CANVAS 2 (pointsGraphCanvas) ---
-    let selectingPointsMode = false;
-    let selectedPoints = []; // {x, y} en coordonnées du graphique
+    // La variable selectingPointsMode est supprimée
+    let selectedPoints = []; // Stocke les points {x, y} en coordonnées du graphique
 
     // --- FONCTIONS DE DESSIN GÉNÉRIQUES ---
     function clearCanvasCtx(ctx) {
@@ -45,30 +45,22 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.beginPath();
         ctx.strokeStyle = '#333';
         ctx.lineWidth = 1;
-
-        // Axe X
         ctx.moveTo(0, oY);
         ctx.lineTo(width, oY);
         ctx.moveTo(width - 10, oY - 5);
         ctx.lineTo(width, oY);
         ctx.lineTo(width - 10, oY + 5);
-
-        // Axe Y
         ctx.moveTo(oX, 0);
         ctx.lineTo(oX, height);
         ctx.moveTo(oX - 5, 10);
         ctx.lineTo(oX, 0);
         ctx.lineTo(oX + 5, 10);
-
         ctx.font = '12px Arial';
         ctx.fillStyle = '#333';
         ctx.fillText('X', width - 15, oY - 10);
         ctx.fillText('Y', oX + 10, 15);
         ctx.fillText('0', oX + 5, oY + 15);
-
-        // Graduations
         ctx.strokeStyle = '#ccc';
-        // Axe X
         for (let x = -Math.floor(oX / scale); x <= Math.floor((width - oX) / scale); x++) {
             if (x === 0) continue;
             const pixelX = oX + x * scale;
@@ -76,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.lineTo(pixelX, oY + 3);
             if (x % 2 === 0) ctx.fillText(x.toString(), pixelX - (x < 0 ? 8 : 4), oY + 15);
         }
-        // Axe Y
         for (let y = -Math.floor(oY / scale); y <= Math.floor((height - oY) / scale); y++) {
             if (y === 0) continue;
             const pixelY = oY - y * scale;
@@ -91,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const width = ctx.canvas.width;
         const oX = width / 2;
         const oY = ctx.canvas.height / 2;
-
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
@@ -166,30 +156,20 @@ document.addEventListener('DOMContentLoaded', () => {
     clearLinesButton.addEventListener('click', () => {
         drawnLines = [];
         colorIndex = 0;
-        redrawLinesOnCanvas1(); // Redessine juste les axes et vide la liste
+        redrawLinesOnCanvas1();
     });
 
     // --- LOGIQUE POUR CANVAS 2 (pointsGraphCanvas) ---
-    startPointsButton.addEventListener('click', () => {
-        selectingPointsMode = !selectingPointsMode;
-        if (selectingPointsMode) {
-            startPointsButton.textContent = "Arrêter la sélection";
-            startPointsButton.classList.add('active');
-            pointsCanvas.classList.add('crosshair-cursor');
-            selectedPoints = [];
+    // Pas de bouton startPointsButton, le canvas est toujours "actif" implicitement.
+    pointsCanvas.addEventListener('click', (event) => {
+        // Si 2 points ont déjà été sélectionnés (et donc une équation calculée),
+        // le prochain clic réinitialise le processus pour une nouvelle sélection.
+        if (selectedPoints.length === 2) {
+            selectedPoints = []; // Vide les points pour une nouvelle sélection
             clearCanvasCtx(pointsCtx); // Efface le canvas des points
             drawAxes(pointsCtx);       // Redessine les axes
-            pointsEquationResultDiv.innerHTML = "<p>Cliquez sur le graphique pour choisir le premier point.</p>";
-        } else {
-            startPointsButton.textContent = "Commencer la sélection des points";
-            startPointsButton.classList.remove('active');
-            pointsCanvas.classList.remove('crosshair-cursor');
-            // Ne pas effacer le résultat ici, l'utilisateur pourrait vouloir le voir
+            pointsEquationResultDiv.innerHTML = ""; // Vide la zone de résultat précédente
         }
-    });
-
-    pointsCanvas.addEventListener('click', (event) => {
-        if (!selectingPointsMode) return;
 
         const rect = pointsCanvas.getBoundingClientRect();
         const pixelX = event.clientX - rect.left;
@@ -201,40 +181,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const graphY = parseFloat(((oY - pixelY) / scale).toFixed(2));
 
         selectedPoints.push({ x: graphX, y: graphY });
-        // Efface et redessine les axes et les points pour éviter de dessiner sur l'ancienne ligne calculée
-        clearCanvasCtx(pointsCtx);
-        drawAxes(pointsCtx);
-        selectedPoints.forEach(p => drawPoint(pointsCtx, p.x, p.y));
-
+        drawPoint(pointsCtx, graphX, graphY); // Dessine le point cliqué
 
         if (selectedPoints.length === 1) {
-            pointsEquationResultDiv.innerHTML = `<p>Premier point : (x: ${graphX}, y: ${graphY}). Cliquez pour le deuxième point.</p>`;
+            pointsEquationResultDiv.innerHTML = `<p>Premier point sélectionné : (x: ${graphX}, y: ${graphY}).<br>Cliquez à nouveau sur le graphique pour choisir le deuxième point.</p>`;
         } else if (selectedPoints.length === 2) {
             const [p1, p2] = selectedPoints;
+            // Met à jour le message pour inclure les deux points avant le calcul
+            pointsEquationResultDiv.innerHTML = `<p>Points sélectionnés : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`;
             calculateAndDisplayEquationOnCanvas2(p1, p2);
-            selectingPointsMode = false; // Quitte le mode sélection
-            startPointsButton.textContent = "Commencer la sélection des points";
-            startPointsButton.classList.remove('active');
-            pointsCanvas.classList.remove('crosshair-cursor');
+            // Les points et la droite restent visibles. Le prochain clic effacera (géré au début de cet écouteur).
         }
     });
 
     function calculateAndDisplayEquationOnCanvas2(p1, p2) {
         let equationText = "";
         let stepsText = "";
-        let lineA, lineB; // Pour stocker a et b pour le dessin
+        let lineA, lineB;
 
-        // On ne vide plus pointsEquationResultDiv ici pour garder les coordonnées des points
-        // mais on s'assure de ne pas dupliquer le contenu si l'utilisateur reclique rapidement.
-        // Une approche plus robuste serait de séparer l'affichage des points de celui de l'équation.
-        let baseInfo = `<p>Points : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`;
-
+        // Le message initial avec les coordonnées des points est déjà affiché par l'appelant
 
         if (p1.x === p2.x) {
             equationText = `<span class="equation">x = ${p1.x}</span>`;
             stepsText = `<div class="steps">Les deux points ont la même abscisse (x = ${p1.x}). C'est une droite verticale.</div>`;
-            // Pour dessiner une droite verticale, on ne peut pas utiliser drawSingleLine directement
-            // On la dessine manuellement ici
             pointsCtx.beginPath();
             pointsCtx.strokeStyle = 'purple';
             pointsCtx.lineWidth = 2;
@@ -254,30 +223,19 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
             drawSingleLine(pointsCtx, lineA, lineB, 'purple');
         }
-        pointsEquationResultDiv.innerHTML = baseInfo + equationText + stepsText;
+        // Ajoute l'équation et les étapes au message existant
+        pointsEquationResultDiv.innerHTML += equationText + stepsText;
     }
 
     // --- INITIALISATION ---
     function init() {
-        // Canvas 1 (linesGraphCanvas)
         clearCanvasCtx(linesCtx);
         drawAxes(linesCtx);
-        // Dé-commenter pour une droite par défaut au chargement pour linesGraphCanvas
-        // const initialA = parseFloat(valeurAInput.value);
-        // const initialB = parseFloat(valeurBInput.value);
-        // if (!isNaN(initialA) && !isNaN(initialB)) {
-        //     const initialColor = lineColors[colorIndex % lineColors.length];
-        //     drawnLines.push({ a: initialA, b: initialB, color: initialColor });
-        //     colorIndex++;
-        //     redrawLinesOnCanvas1();
-        // } else {
-        //     updateEquationsListDisplay(); // Assure que la liste est vide si pas de droite initiale
-        // }
-
-
-        // Canvas 2 (pointsGraphCanvas)
         clearCanvasCtx(pointsCtx);
         drawAxes(pointsCtx);
+        // Le curseur pour pointsCanvas est maintenant géré par CSS.
+        // Si un message initial est souhaité pour pointsEquationResultDiv :
+        pointsEquationResultDiv.innerHTML = "<p>Cliquez sur le graphique ci-dessus pour commencer à sélectionner deux points.</p>";
     }
 
     init();

@@ -87,32 +87,20 @@ h2 {
     background-color: #c9302c;
 }
 
-/* Bouton "Commencer la sélection des points" (section 2) */
-#startPointsButton {
-    background-color: #f0ad4e; /* Orange */
-    margin-bottom: 15px;
-}
-#startPointsButton:hover {
-    background-color: #ec971f;
-}
-#startPointsButton.active { /* Style quand le mode sélection est actif */
-    background-color: #ec971f;
-    box-shadow: 0 0 8px #da8c10;
-    font-weight: bold;
-}
-
 /* Styles pour les DEUX canvas */
-#linesGraphCanvas, #pointsGraphCanvas {
+#linesGraphCanvas { /* Le canvas des lignes garde un curseur par défaut */
     border: 2px solid #333;
     background-color: #ffffff;
     display: block;
-    margin: 0 auto 20px auto; /* Centre et ajoute marge en bas */
+    margin: 0 auto 20px auto;
     cursor: default;
 }
-
-/* Spécificité pour le curseur du canvas de sélection de points (sera géré par JS) */
-#pointsGraphCanvas.crosshair-cursor {
-    cursor: crosshair;
+#pointsGraphCanvas { /* Le canvas des points a un curseur en croix */
+    border: 2px solid #333;
+    background-color: #ffffff;
+    display: block;
+    margin: 0 auto 20px auto;
+    cursor: crosshair; /* Curseur indiquant la possibilité de cliquer pour sélectionner */
 }
 
 
