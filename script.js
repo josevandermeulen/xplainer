@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // The initial message with point coordinates is set by the caller,
             // and it's a temporary message. We'll build the full translated message here.
-            let initialMessage = `<p>Points sélectionnés : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`;
+            let initialMessage = `<p>${getString('points_selection_message', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y })}</p>`;
 
 
             if (p1.x === p2.x) {
