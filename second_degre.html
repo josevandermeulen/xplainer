@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorer les Équations du Second Degré</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Explorer les Équations du Second Degré</h1>
+        <nav class="page-navigation">
+            <a href="index.html">Équations Linéaires (y = ax + b)</a>
+        </nav>
+    </header>
+
+    <section id="introduction-second-degre">
+        <h2>Qu'est-ce qu'une équation du second degré ?</h2>
+        <p>
+            Une équation du second degré est une équation polynomiale de degré 2, qui peut s'écrire sous la forme canonique :
+            <strong>ax² + bx + c = 0</strong>, où 'a', 'b', et 'c' sont des coefficients réels, et 'a' est non nul.
+        </p>
+        <p>
+            La représentation graphique d'une fonction du second degré (y = ax² + bx + c) est une <strong>parabole</strong>.
+            L'orientation de la parabole dépend du signe de 'a' :
+        </p>
+        <ul>
+            <li>Si 'a' > 0, la parabole est ouverte vers le haut.</li>
+            <li>Si 'a' < 0, la parabole est ouverte vers le bas.</li>
+        </ul>
+        <p>
+            Le <strong>discriminant</strong> (Δ = b² - 4ac) joue un rôle crucial pour déterminer le nombre de solutions (ou racines) de l'équation :
+        </p>
+        <ul>
+            <li>Si Δ > 0, il y a deux racines réelles distinctes.</li>
+            <li>Si Δ = 0, il y a une racine réelle double.</li>
+            <li>Si Δ < 0, il n'y a pas de racines réelles (mais deux racines complexes conjuguées).</li>
+        </ul>
+        <p>Cette page vous permettra d'analyser ces équations et de visualiser les paraboles correspondantes.</p>
+    </section>
+
+    <section id="interactive-parabola">
+        <h2>Analyse et Visualisation de la Parabole</h2>
+        <div class="controls">
+            <label for="valeurA_sd">Coefficient a :</label>
+            <input type="number" id="valeurA_sd" value="1" step="any">
+
+            <label for="valeurB_sd">Coefficient b :</label>
+            <input type="number" id="valeurB_sd" value="0" step="any">
+
+            <label for="valeurC_sd">Coefficient c :</label>
+            <input type="number" id="valeurC_sd" value="0" step="any">
+
+            <button id="analyzeButton">Analyser et Dessiner la Parabole</button>
+        </div>
+
+        <div id="algebraicResults">
+            <h4>Analyse de l'équation :</h4>
+            <div id="equationDetails"></div> <!-- Pour afficher a,b,c saisis -->
+            <div id="discriminantResult"></div> <!-- Pour afficher Delta -->
+            <div id="rootsResult"></div> <!-- Pour afficher les racines -->
+            <div id="vertexResult"></div> <!-- Pour afficher le sommet -->
+        </div>
+
+        <canvas id="parabolaCanvas" width="600" height="500">
+            Votre navigateur ne supporte pas l'élément canvas.
+        </canvas>
+    </section>
+
+    <footer>
+        <p>Site interactif pour apprendre les mathématiques.</p>
+    </footer>
+
+    <script src="second_degre.js"></script>
+</body>
+</html>

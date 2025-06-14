@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprendre les Équations Linéaires et Jouer avec les Droites</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Comprendre les Équations Linéaires</h1>
+        <nav class="page-navigation">
+            <a href="second_degre.html">Équations du Second Degré (ax² + bx + c = 0)</a>
+        </nav>
+    </header>
+
+    <section id="introduction">
+        <h2>Qu'est-ce qu'une équation linéaire ?</h2>
+        <p>
+            Une équation linéaire est une équation mathématique qui peut être représentée par une droite sur un graphique.
+            La forme la plus courante est <strong>y = ax + b</strong>, où :
+        </p>
+        <ul>
+            <li><strong>y</strong> représente la valeur sur l'axe vertical (les ordonnées).</li>
+            <li><strong>x</strong> représente la valeur sur l'axe horizontal (les abscisses).</li>
+            <li><strong>a</strong> est la <strong>pente</strong> de la droite. Elle indique à quel point la droite monte ou descend. Si 'a' est positif, la droite monte. Si 'a' est négatif, la droite descend.</li>
+            <li><strong>b</strong> est l'<strong>ordonnée à l'origine</strong>. C'est le point où la droite coupe l'axe des y (quand x = 0).</li>
+        </ul>
+        <p>
+            Ensemble, 'a' et 'b' déterminent la position et l'inclinaison exactes de la droite sur le graphique.
+            Sur ce site, tu vas pouvoir expérimenter avec ces valeurs pour voir comment elles affectent la droite !
+        </p>
+    </section>
+
+    <section id="interactive-graph">
+        <h2>Joue avec les droites ! (y = ax + b)</h2>
+        <p>Modifie les valeurs de 'a' et 'b' ci-dessous, puis clique sur "Dessiner la droite" pour l'ajouter au graphique. Utilise "Tout effacer" pour nettoyer.</p>
+
+        <div class="controls">
+            <label for="valeurA">Pente (a) :</label>
+            <input type="number" id="valeurA" value="1" step="any">
+
+            <label for="valeurB">Ordonnée à l'origine (b) :</label>
+            <input type="number" id="valeurB" value="0" step="any">
+
+            <button id="drawUserLineButton">Dessiner la droite</button>
+            <button id="clearLinesButton">Tout effacer</button>
+        </div>
+
+        <canvas id="linesGraphCanvas" width="600" height="400">
+            Votre navigateur ne supporte pas l'élément canvas.
+        </canvas>
+
+        <div id="equationsListContainer">
+            <h4>Équations affichées :</h4>
+            <ul id="equationsList">
+                <!-- Les équations seront ajoutées ici par JavaScript -->
+            </ul>
+        </div>
+    </section>
+
+    <section id="findEquationSection">
+        <h2>Trouver l'équation d'une droite à partir de deux points</h2>
+        <p>Cliquez directement sur le graphique dédié ci-dessous pour définir deux points. L'équation de la droite passant par ces points sera calculée et affichée ici.</p>
+
+        <canvas id="pointsGraphCanvas" width="600" height="400">
+            Votre navigateur ne supporte pas l'élément canvas.
+        </canvas>
+
+        <div id="pointsEquationResultContainer">
+            <h4>Équation et calcul :</h4>
+            <div id="pointsEquationResult">
+                <!-- L'équation calculée et l'explication apparaîtront ici -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Site interactif pour apprendre les équations linéaires.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
