@@ -1,236 +1,242 @@
-/* Styles existants (raccourcis pour la concision, ne pas les supprimer, juste ajouter/modifier) */
+/* Réinitialisation de base et styles généraux */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    margin: 0; /* Enlève la marge par défaut du body pour que le header prenne toute la largeur */
-    padding: 0; /* Enlève le padding par défaut */
+    margin: 0;
+    padding: 0;
     background-color: #f4f4f4;
     color: #333;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    min-height: 100vh;
 }
 
 header {
-    background-color: #3a7ca5; /* Bleu principal */
-    color: #ffffff;
+    background: #333;
+    color: #fff;
     padding: 1rem 0;
-    margin-bottom: 20px;
-    width: 100%; /* Toute la largeur */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centre le contenu du header */
+    text-align: center;
 }
 
 header h1 {
-    margin: 0 0 0.5rem 0; /* Ajoute une marge en bas pour espacer de la nav */
+    margin: 0;
     font-size: 2em;
 }
 
-/* Styles pour la navigation entre les pages */
-nav.page-navigation {
+header .page-navigation {
     margin-top: 10px;
 }
 
-nav.page-navigation a {
+header .page-navigation a {
     color: #fff;
-    margin: 0 15px;
     text-decoration: none;
-    font-size: 1.1em;
     padding: 5px 10px;
-    border-radius: 4px;
+    border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
-nav.page-navigation a:hover, nav.page-navigation a.active { /* Style pour lien actif si on l'implémente plus tard */
-    background-color: #2a5a75; /* Un bleu un peu plus foncé */
+header .page-navigation a:hover {
+    background-color: #555;
 }
-
 
 section {
-    background: #fff;
     padding: 20px;
-    margin: 20px; /* Ajout de marge sur les côtés aussi */
+    margin: 15px;
+    background: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: calc(100% - 40px); /* Prend en compte les marges */
-    max-width: 800px;
 }
 
-h2 {
-    color: #3a7ca5;
-    margin-top: 0;
+section h2 {
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
 }
 
+ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+/* Styles pour les contrôles interactifs */
 .controls {
     margin-bottom: 20px;
+    padding: 15px;
+    background-color: #e9e9e9;
+    border-radius: 5px;
     display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne sur petits écrans */
+    gap: 15px; /* Espace entre les éléments */
+    align-items.center; /* Aligner verticalement les items */
 }
 
 .controls label {
     font-weight: bold;
+    margin-right: 5px;
+    flex-shrink: 0; /* Empêche le label de rétrécir */
 }
 
 .controls input[type="number"] {
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    width: 70px;
+    width: 80px; /* Largeur fixe pour les inputs numériques */
 }
 
-/* Styles pour les boutons (générique pour tous les boutons d'action) */
-.controls button, #interactive-parabola button {
+.controls button {
     padding: 10px 15px;
+    background-color: #337ab7; /* Bleu Bootstrap */
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.95em;
     transition: background-color 0.3s ease;
 }
 
-/* Bouton "Dessiner la droite" (page index.html) */
-#drawUserLineButton {
-    background-color: #5cb85c; /* Vert */
+.controls button:hover {
+    background-color: #286090; /* Bleu plus foncé au survol */
 }
-#drawUserLineButton:hover {
-    background-color: #4cae4c;
-}
-
-/* Bouton "Tout effacer" (page index.html) */
-#clearLinesButton {
-    background-color: #d9534f; /* Rouge */
-}
-#clearLinesButton:hover {
-    background-color: #c9302c;
-}
-
-/* Bouton "Analyser et Dessiner la Parabole" (page second_degre.html) */
-#analyzeButton {
-    background-color: #5bc0de; /* Bleu info */
-}
-#analyzeButton:hover {
-    background-color: #31b0d5;
-}
-
 
 /* Styles pour les canvas */
-#linesGraphCanvas, #pointsGraphCanvas, #parabolaCanvas {
-    border: 2px solid #333;
-    background-color: #ffffff;
-    display: block;
-    margin: 20px auto; /* Marge en haut/bas et centrage auto horizontal */
-}
-#pointsGraphCanvas {
-    cursor: crosshair;
-}
-
-/* Section des résultats pour la parabole */
-#algebraicResults {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 6px;
-    text-align: left;
-}
-#algebraicResults h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #3a7ca5;
-    font-size: 1.2em;
-}
-#algebraicResults div { /* Style pour chaque sous-div de résultat */
-    margin-bottom: 8px;
-    line-height: 1.5;
-    font-family: 'Courier New', Courier, monospace;
-}
-#algebraicResults strong { /* Pour mettre en évidence les termes comme y, x², x, etc. */
-    font-weight: bold;
-    color: #333;
+canvas {
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    background-color: #fff; /* Fond blanc pour le canvas */
+    display: block; /* Assure que le canvas est un block pour centrage/marges */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-
-/* Styles pour la liste des équations affichées (page index.html) */
-#equationsListContainer {
+/* Styles pour la liste des équations et résultats */
+#equationsListContainer, #pointsEquationResultContainer, #algebraicResults {
     margin-top: 15px;
     padding: 10px;
-    background-color: #e9ecef;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
     border-radius: 4px;
-    text-align: left;
-}
-#equationsListContainer h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #333;
-}
-#equationsList {
-    list-style-type: none;
-    padding-left: 0;
-    margin-bottom: 0;
-}
-#equationsList li {
-    padding: 5px 0;
-    border-bottom: 1px solid #ddd;
-    font-family: 'Courier New', Courier, monospace;
-}
-#equationsList li:last-child {
-    border-bottom: none;
 }
 
-/* Styles pour la section "Trouver l'équation à partir de deux points" (page index.html) */
-#findEquationSection p {
-    margin-bottom: 15px;
-}
-#pointsEquationResultContainer {
-    margin-top: 15px;
-    padding: 15px;
-    background-color: #e9ecef;
-    border-radius: 4px;
-    text-align: left;
-}
-#pointsEquationResultContainer h4 {
+#equationsListContainer h4, #pointsEquationResultContainer h4, #algebraicResults h4 {
     margin-top: 0;
-    margin-bottom: 10px;
-    color: #333;
-}
-#pointsEquationResult {
-    font-family: 'Courier New', Courier, monospace;
-    line-height: 1.8;
-}
-#pointsEquationResult .equation {
-    font-weight: bold;
-    color: #3a7ca5;
-    margin-bottom: 10px;
-    display: block;
-}
-#pointsEquationResult .steps {
-    font-size: 0.9em;
     color: #555;
 }
 
-footer {
-    margin-top: 30px;
-    padding: 20px 0; /* Plus de padding pour le footer */
-    color: #777;
-    font-size: 0.9em;
-    width: 100%;
-    text-align: center;
-    background-color: #e9ecef; /* Fond léger pour le footer */
-    border-top: 1px solid #ddd; /* Ligne de séparation */
+#equationsList {
+    list-style-type: none; /* Pas de puces pour les équations */
+    padding-left: 0;
 }
 
-#introduction ul, #introduction-second-degre ul { /* S'applique aux listes des deux pages */
-    text-align: left;
-    display: inline-block; /* Pour centrer le bloc ul */
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding-left: 20px; /* Ajoute un peu de padding pour les puces */
+#equationsList li {
+    padding: 5px 0;
+    border-bottom: 1px dashed #ddd; /* Séparateur léger */
 }
-#introduction ul li, #introduction-second-degre ul li {
-    margin-bottom: 8px; /* Espace entre les items de la liste */
+
+#equationsList li:last-child {
+    border-bottom: none; /* Pas de bordure pour le dernier élément */
+}
+
+.equation { /* Style pour la partie équation dans le résultat */
+    font-weight: bold;
+    color: #2a6496; /* Bleu foncé pour l'équation */
+    display: block; /* Pour qu'elle prenne sa propre ligne */
+    margin-bottom: 5px;
+}
+
+.steps { /* Style pour les étapes de calcul */
+    font-size: 0.9em;
+    color: #444;
+    margin-top: 5px;
+    padding-left: 10px;
+    border-left: 2px solid #77cc77; /* Bordure verte pour les étapes */
+    background-color: #f0fff0; /* Fond légèrement vert */
+    padding: 8px;
+}
+
+
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background: #333;
+    color: #fff;
+    margin-top: auto; /* Colle le footer en bas */
+}
+
+/* Styles pour le sélecteur de langue */
+/* Applied when .language-switcher is in the footer */
+footer .language-switcher {
+    display: block; /* Make it a block to take full width for text-align */
+    text-align: center; /* Center the label and select within the div */
+    margin-top: 0; /* Reset top margin, p tag above will handle spacing */
+    margin-bottom: 15px; /* Space below the switcher, before the footer text p */
+    padding: 5px;
+}
+
+footer .language-switcher label {
+    margin-right: 5px;
+    color: #fff; /* Ensure label color is white in footer */
+}
+
+footer .language-switcher select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    color: #333; /* Text color inside select */
+}
+
+/* General footer paragraph style adjustment if needed */
+footer p {
+    margin: 0; /* Remove default p margins if switcher is block */
+}
+
+
+/* Styles spécifiques pour la page du second degré */
+#interactive-parabola .controls input[type="number"] {
+    width: 60px; /* Un peu plus petit si besoin pour 'a,b,c' */
+}
+
+#algebraicResults div {
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+#algebraicResults div:last-child {
+    border-bottom: none;
+}
+#algebraicResults strong { /* Pour y=ax²+bx+c */
+    color: #337ab7;
+}
+
+/* Responsive: ajustements pour petits écrans */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .controls {
+        flex-direction: column; /* Empiler les contrôles verticalement */
+        align-items: stretch; /* Étirer les items pour prendre la largeur */
+    }
+
+    .controls input[type="number"], .controls button {
+        width: auto; /* Permettre aux inputs/boutons de prendre plus de largeur */
+        margin-bottom: 10px; /* Ajouter de l'espace en bas */
+    }
+
+    .controls label {
+        margin-bottom: 3px; /* Espace sous le label */
+        display: block; /* Label sur sa propre ligne */
+    }
+
+    canvas {
+        max-width: 100%; /* Assurer que le canvas ne dépasse pas de l'écran */
+        height: auto; /* Maintenir le ratio d'aspect */
+    }
 }
