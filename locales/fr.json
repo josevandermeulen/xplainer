@@ -21,7 +21,6 @@
   "find_equation_instructions": "Cliquez directement sur le graphique dédié ci-dessous pour définir deux points. L'équation de la droite passant par ces points sera calculée et affichée ici.",
   "canvas_fallback_points": "Votre navigateur ne supporte pas l'élément canvas.",
   "equation_result_title": "Équation et calcul :",
-  "footer_text": "Site interactif pour apprendre les équations linéaires.",
   "quadratic_page_title": "Explorer les Équations du Second Degré",
   "quadratic_main_heading": "Explorer les Équations du Second Degré",
   "nav_linear_equations": "Équations Linéaires (y = ax + b)",

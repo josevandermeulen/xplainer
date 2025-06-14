@@ -21,7 +21,6 @@
   "find_equation_instructions": "Click directly on the dedicated graph below to define two points. The equation of the line passing through these points will be calculated and displayed here.",
   "canvas_fallback_points": "Your browser does not support the canvas element.",
   "equation_result_title": "Equation and calculation:",
-  "footer_text": "Interactive site for learning linear equations.",
   "quadratic_page_title": "Explore Quadratic Equations",
   "quadratic_main_heading": "Exploring Quadratic Equations",
   "nav_linear_equations": "Linear Equations (y = ax + b)",
@@ -62,5 +61,6 @@
   "roots_one_double_real": "One real double root: x₁ = x₂ = {x1}",
   "roots_no_real_complex_conjugate": "No real roots (two complex conjugate roots).",
   "quadratic_initial_prompt": "Enter coefficients a, b, c and click the button.",
-  "language_switcher_label": "Language:"
+  "language_switcher_label": "Language:",
+  "footer_text": "Interactive site for learning linear equations."
 }
