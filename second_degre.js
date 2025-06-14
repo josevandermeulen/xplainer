@@ -116,10 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const b = parseFloat(valeurBInput.value);
         const c = parseFloat(valeurCInput.value);
 
-        equationDetailsDiv.innerHTML = `Équation : <strong>y = ${a}x² + ${b}x + ${c}</strong>`;
+        equationDetailsDiv.innerHTML = getString('quadratic_equation_display', { a: a, b: b, c: c });
 
         if (isNaN(a) || isNaN(b) || isNaN(c)) {
-            discriminantResultDiv.innerHTML = "<p style='color:red;'>Veuillez entrer des valeurs numériques valides pour a, b, et c.</p>";
+            discriminantResultDiv.innerHTML = `<p style='color:red;'>${getString('alert_invalid_coeffs_abc')}</p>`;
             rootsResultDiv.innerHTML = "";
             vertexResultDiv.innerHTML = "";
             clearCanvas();
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (a === 0) {
-            discriminantResultDiv.innerHTML = "<p style='color:red;'>Le coefficient 'a' ne peut pas être égal à zéro pour une équation du second degré. Ceci est une équation linéaire.</p>";
+            discriminantResultDiv.innerHTML = `<p style='color:red;'>${getString('alert_a_cannot_be_zero_quadratic')}</p>`;
             rootsResultDiv.innerHTML = "";
             vertexResultDiv.innerHTML = "";
             // On pourrait dessiner la droite ici si on veut, ou juste effacer.
@@ -142,20 +142,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const sommetX = -b / (2 * a);
         const sommetY = a * sommetX * sommetX + b * sommetX + c; // Ou: (-delta) / (4*a)
 
-        discriminantResultDiv.innerHTML = `Discriminant Δ = b² - 4ac = ${delta.toFixed(3)}`;
-        vertexResultDiv.innerHTML = `Sommet S = (${sommetX.toFixed(3)}, ${sommetY.toFixed(3)})`;
+        discriminantResultDiv.innerHTML = getString('discriminant_display', { delta: delta.toFixed(3) });
+        vertexResultDiv.innerHTML = getString('vertex_display', { x: sommetX.toFixed(3), y: sommetY.toFixed(3) });
 
-        let rootsMessage = "Racines (solutions pour ax² + bx + c = 0) :<br>";
+        let rootsMessage = getString('roots_solutions_title');
         let x1, x2;
         if (delta > 0) {
             x1 = (-b - Math.sqrt(delta)) / (2 * a);
             x2 = (-b + Math.sqrt(delta)) / (2 * a);
-            rootsMessage += `Deux racines réelles distinctes : x₁ = ${x1.toFixed(3)}, x₂ = ${x2.toFixed(3)}`;
+            rootsMessage += getString('roots_two_distinct_real', { x1: x1.toFixed(3), x2: x2.toFixed(3) });
         } else if (delta === 0) {
             x1 = -b / (2 * a);
-            rootsMessage += `Une racine réelle double : x₁ = x₂ = ${x1.toFixed(3)}`;
+            rootsMessage += getString('roots_one_double_real', { x1: x1.toFixed(3) });
         } else {
-            rootsMessage += "Pas de racines réelles (deux racines complexes conjuguées).";
+            rootsMessage += getString('roots_no_real_complex_conjugate');
         }
         rootsResultDiv.innerHTML = rootsMessage;
 
@@ -197,5 +197,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialisation: dessiner les axes une première fois
     drawAxes(originX, originY, scale);
-    equationDetailsDiv.innerHTML = "Entrez les coefficients a, b, c et cliquez sur le bouton.";
+    equationDetailsDiv.innerHTML = getString('quadratic_initial_prompt');
 });

@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LOGIQUE POUR CANVAS 1 (linesGraphCanvas) ---
     function addLineToEquationList(a, b, color) {
         const listItem = document.createElement('li');
-        listItem.textContent = `y = ${a}x + ${b}`;
+        listItem.textContent = getString('equation_format_y_ax_b', { a: a, b: b });
         listItem.style.color = color;
         equationsListUL.appendChild(listItem);
     }
@@ -139,12 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const a = parseFloat(valeurAInput.value);
         const b = parseFloat(valeurBInput.value);
         if (isNaN(a) || isNaN(b)) {
-            alert("Veuillez entrer des valeurs numériques valides pour 'a' et 'b'.");
+            alert(getString('alert_invalid_values_a_b'));
             return;
         }
         const existingLine = drawnLines.find(line => line.a === a && line.b === b);
         if (existingLine) {
-            alert("Cette droite est déjà dessinée. Modifiez 'a' ou 'b' ou effacez le graphique.");
+            alert(getString('alert_line_already_drawn'));
             return;
         }
         const color = lineColors[colorIndex % lineColors.length];
@@ -184,11 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
         drawPoint(pointsCtx, graphX, graphY); // Dessine le point cliqué
 
         if (selectedPoints.length === 1) {
-            pointsEquationResultDiv.innerHTML = `<p>Premier point sélectionné : (x: ${graphX}, y: ${graphY}).<br>Cliquez à nouveau sur le graphique pour choisir le deuxième point.</p>`;
+            pointsEquationResultDiv.innerHTML = `<p>${getString('point_selection_first_point', { graphX: graphX, graphY: graphY })}</p>`;
         } else if (selectedPoints.length === 2) {
             const [p1, p2] = selectedPoints;
             // Met à jour le message pour inclure les deux points avant le calcul
-            pointsEquationResultDiv.innerHTML = `<p>Points sélectionnés : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`;
+            // This message is temporary and overwritten by calculateAndDisplayEquationOnCanvas2, so no need to translate this exact temporary string.
+            // However, the structure of calculateAndDisplayEquationOnCanvas2 will be updated.
+            pointsEquationResultDiv.innerHTML = `<p>Points sélectionnés : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`; // Keeping this as is, as it's immediately replaced.
             calculateAndDisplayEquationOnCanvas2(p1, p2);
             // Les points et la droite restent visibles. Le prochain clic effacera (géré au début de cet écouteur).
         }
@@ -199,11 +201,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let stepsText = "";
         let lineA, lineB;
 
-        // Le message initial avec les coordonnées des points est déjà affiché par l'appelant
+        // The initial message with point coordinates is set by the caller,
+        // and it's a temporary message. We'll build the full translated message here.
+        let initialMessage = `<p>Points sélectionnés : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`;
+
 
         if (p1.x === p2.x) {
-            equationText = `<span class="equation">x = ${p1.x}</span>`;
-            stepsText = `<div class="steps">Les deux points ont la même abscisse (x = ${p1.x}). C'est une droite verticale.</div>`;
+            equationText = `<span class="equation">${getString('equation_format_vertical_line', { x_value: p1.x })}</span>`;
+            stepsText = `<div class="steps">${getString('explanation_vertical_line', { x_value: p1.x })}</div>`;
             pointsCtx.beginPath();
             pointsCtx.strokeStyle = 'purple';
             pointsCtx.lineWidth = 2;
@@ -216,15 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
             lineB = p1.y - lineA * p1.x;
             const a_rounded = parseFloat(lineA.toFixed(3));
             const b_rounded = parseFloat(lineB.toFixed(3));
-            equationText = `<span class="equation">y = ${a_rounded}x ${b_rounded < 0 ? '-' : '+'} ${Math.abs(b_rounded)}</span>`;
-            stepsText = `<div class="steps">
-                1. Pente (a) = (y2 - y1) / (x2 - x1) = (${p2.y} - ${p1.y}) / (${p2.x} - ${p1.x}) = ${a_rounded}<br>
-                2. Ordonnée à l'origine (b) = y1 - a * x1 = ${p1.y} - (${a_rounded} * ${p1.x}) = ${b_rounded}
-            </div>`;
+            equationText = `<span class="equation">${getString('equation_format_y_ax_b_detailed', { a: a_rounded, sign: (b_rounded < 0 ? '-' : '+'), b: Math.abs(b_rounded) })}</span>`;
+            stepsText = `<div class="steps">${getString('explanation_slope_intercept', { p2y: p2.y, p1y: p1.y, p2x: p2.x, p1x: p1.x, a: a_rounded, b: b_rounded })}</div>`;
             drawSingleLine(pointsCtx, lineA, lineB, 'purple');
         }
-        // Ajoute l'équation et les étapes au message existant
-        pointsEquationResultDiv.innerHTML += equationText + stepsText;
+        // The initialMessage part is already set by the caller if selectedPoints.length === 2
+        // We append the new equation and steps.
+        pointsEquationResultDiv.innerHTML = initialMessage + equationText + stepsText;
     }
 
     // --- INITIALISATION ---
@@ -235,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         drawAxes(pointsCtx);
         // Le curseur pour pointsCanvas est maintenant géré par CSS.
         // Si un message initial est souhaité pour pointsEquationResultDiv :
-        pointsEquationResultDiv.innerHTML = "<p>Cliquez sur le graphique ci-dessus pour commencer à sélectionner deux points.</p>";
+        pointsEquationResultDiv.innerHTML = `<p>${getString('points_graph_initial_prompt')}</p>`;
     }
 
     init();
