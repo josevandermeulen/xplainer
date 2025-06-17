@@ -94,6 +94,7 @@
   "gaussian_goal_heading": "[NL] The Goal: Row Echelon Form",
   "gaussian_goal_desc": "[NL] The objective is to use these row operations to transform the matrix into row echelon form, which typically has ones on the diagonal (for leading coefficients) and zeros below the diagonal. From this form, the solution can be found using back substitution. Further reduction can lead to reduced row echelon form, where solutions can be read off directly.",
   "gaussian_example_solve_heading": "[NL] Example: Solving the 2x2 System",
+  "gaussian_example_solve_initial_matrix": "[NL] Starting with our augmented matrix:",
   "gaussian_example_solve_matrix_1": "[NL]   [ 1  2 | 5 ]\n  [ 3 -1 | 1 ]",
   "gaussian_example_solve_step1_desc": "[NL] Step 1: Eliminate the '3' in the second row, first column. We can do this with the operation R₂ - 3R₁ → R₂.",
   "gaussian_example_solve_matrix_2": "[NL]   [ 1  2 |  5 ]\n  [ 0 -7 | -14 ]",
