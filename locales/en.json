@@ -21,7 +21,6 @@
   "find_equation_instructions": "Click directly on the dedicated graph below to define two points. The equation of the line passing through these points will be calculated and displayed here.",
   "canvas_fallback_points": "Your browser does not support the canvas element.",
   "equation_result_title": "Equation and calculation:",
-  "footer_text": "Interactive site for learning linear equations.",
   "quadratic_page_title": "Explore Quadratic Equations",
   "quadratic_main_heading": "Exploring Quadratic Equations",
   "nav_linear_equations": "Linear Equations (y = ax + b)",
@@ -42,11 +41,11 @@
   "quadratic_button_analyze_draw": "Analyze and Draw Parabola",
   "quadratic_algebraic_results_title": "Equation Analysis:",
   "quadratic_canvas_fallback": "Your browser does not support the canvas element.",
-  "quadratic_footer_text": "Interactive site for learning mathematics.",
   "alert_invalid_values_a_b": "Please enter valid numerical values for 'a' and 'b'.",
   "alert_line_already_drawn": "This line is already drawn. Modify 'a' or 'b' or clear the graph.",
   "equation_format_y_ax_b": "y = {a}x + {b}",
   "point_selection_first_point": "First point selected: (x: {graphX}, y: {graphY}).<br>Click again on the graph to choose the second point.",
+  "points_selection_message": "Selected points: (x1: {x1}, y1: {y1}) and (x2: {x2}, y2: {y2}).",
   "equation_format_vertical_line": "x = {x_value}",
   "explanation_vertical_line": "Both points have the same x-coordinate (x = {x_value}). This is a vertical line.",
   "equation_format_y_ax_b_detailed": "y = {a}x {sign} {b}",
@@ -62,5 +61,6 @@
   "roots_one_double_real": "One real double root: x₁ = x₂ = {x1}",
   "roots_no_real_complex_conjugate": "No real roots (two complex conjugate roots).",
   "quadratic_initial_prompt": "Enter coefficients a, b, c and click the button.",
-  "language_switcher_label": "Language:"
+  "language_switcher_label": "Language:",
+  "footer_text": "Interactive site for learning linear equations."
 }

@@ -4,10 +4,13 @@ let translations = {};
 
 function applyTranslations() {
     console.log("applyTranslations called for language:", currentLanguage);
+    console.log("Current translations:", translations);
 
     document.querySelectorAll('[data-translate]').forEach(element => {
         const key = element.getAttribute('data-translate');
-        const translatedString = getString(key); // getString will return the key itself or a default if not found
+        console.log(`Translating element with key: ${key}`);
+        const translatedString = getString(key);
+        console.log(`Translation for ${key}:`, translatedString);
 
         if (element.tagName === 'TITLE') {
             document.title = translatedString;
@@ -28,7 +31,9 @@ function applyTranslations() {
 }
 
 async function setLanguage(lang) {
+    console.log("setLanguage called with:", lang);
     try {
+        console.log(`Fetching translations for ${lang}...`);
         const response = await fetch(`locales/${lang}.json`);
         if (!response.ok) {
             // If the specific language file is not found, try to construct a more informative error.
@@ -39,6 +44,7 @@ async function setLanguage(lang) {
             throw new Error(errorMsg);
         }
         const data = await response.json();
+        console.log(`Loaded translations for ${lang}:`, data);
         translations = data;
         const oldLanguage = currentLanguage;
         currentLanguage = lang;
@@ -106,18 +112,26 @@ function updateLangSelector() {
 }
 
 // Initialize localization and set up event listener after DOM is loaded
+console.log("i18n.js script loaded");
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM Content Loaded - Initializing localization");
+    const langSelect = document.getElementById('lang-select');
+    console.log("Language selector found:", langSelect);
+    
+    if (langSelect) {
+        console.log("Setting up language selector event listener");
+        langSelect.addEventListener('change', (event) => {
+            console.log("Language selector changed to:", event.target.value);
+            setLanguage(event.target.value);
+        });
+    }
+
     initializeLocalization().then(() => {
-        // After initial localization, set up the event listener for the language switcher
-        const langSelect = document.getElementById('lang-select');
+        console.log("Localization initialized");
         if (langSelect) {
-            langSelect.addEventListener('change', (event) => {
-                setLanguage(event.target.value);
-            });
-            // Ensure the selector is updated to the potentially loaded language from localStorage
             updateLangSelector();
         }
     }).catch(error => {
-        console.error("Error during localization initialization or event listener setup:", error);
+        console.error("Error during localization initialization:", error);
     });
 });

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-translate="home_title">Comprendre les Équations Linéaires et Jouer avec les Droites</title>
     <link rel="stylesheet" href="style.css">
-    <script src="i18n.js" defer></script>
 </head>
 <body>
     <header>
@@ -13,6 +12,15 @@
         <nav class="page-navigation">
             <a href="second_degre.html" data-translate="nav_quadratic_equations">Équations du Second Degré (ax² + bx + c = 0)</a>
         </nav>
+        <div class="language-switcher">
+            <label for="lang-select" data-translate="language_switcher_label">Language:</label>
+            <select id="lang-select">
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="nl">Nederlands</option>
+            </select>
+        </div>
     </header>
 
     <section id="introduction">
@@ -77,18 +85,10 @@
     </section>
 
     <footer>
-        <div class="language-switcher">
-            <label for="lang-select" data-translate="language_switcher_label">Language:</label>
-            <select id="lang-select">
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="nl">Nederlands</option>
-            </select>
-        </div>
         <p data-translate="footer_text">Site interactif pour apprendre les équations linéaires.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="i18n.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

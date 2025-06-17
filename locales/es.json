@@ -19,10 +19,9 @@
   "equations_list_title": "Ecuaciones mostradas:",
   "find_equation_title": "Encontrar la ecuación de una recta a partir de dos puntos",
   "find_equation_instructions": "Haz clic directamente en el gráfico dedicado a continuación para definir dos puntos. La ecuación de la recta que pasa por estos puntos se calculará y se mostrará aquí.",
-  "canvas_fallback_points": "Su navegador no soporta el elemento canvas.",
+  "canvas_fallback_points": "Tu navegador no soporta el elemento canvas.",
   "equation_result_title": "Ecuación y cálculo:",
-  "footer_text": "Sitio interactivo para aprender ecuaciones lineales.",
-  "quadratic_page_title": "Explorar las Ecuaciones de Segundo Grado",
+  "quadratic_page_title": "Explorar Ecuaciones Cuadráticas",
   "quadratic_main_heading": "Explorando las Ecuaciones de Segundo Grado",
   "nav_linear_equations": "Ecuaciones Lineales (y = ax + b)",
   "quadratic_intro_what_is": "¿Qué es una ecuación de segundo grado?",
@@ -42,11 +41,11 @@
   "quadratic_button_analyze_draw": "Analizar y Dibujar Parábola",
   "quadratic_algebraic_results_title": "Análisis de la ecuación:",
   "quadratic_canvas_fallback": "Su navegador no soporta el elemento canvas.",
-  "quadratic_footer_text": "Sitio interactivo para aprender matemáticas.",
   "alert_invalid_values_a_b": "Por favor, introduce valores numéricos válidos para 'a' y 'b'.",
   "alert_line_already_drawn": "Esta recta ya está dibujada. Modifica 'a' o 'b' o borra el gráfico.",
   "equation_format_y_ax_b": "y = {a}x + {b}",
   "point_selection_first_point": "Primer punto seleccionado: (x: {graphX}, y: {graphY}).<br>Haz clic de nuevo en el gráfico para elegir el segundo punto.",
+  "points_selection_message": "Puntos seleccionados: (x1: {x1}, y1: {y1}) y (x2: {x2}, y2: {y2}).",
   "equation_format_vertical_line": "x = {x_value}",
   "explanation_vertical_line": "Ambos puntos tienen la misma abscisa (x = {x_value}). Es una recta vertical.",
   "equation_format_y_ax_b_detailed": "y = {a}x {sign} {b}",
@@ -62,5 +61,6 @@
   "roots_one_double_real": "Una raíz real doble: x₁ = x₂ = {x1}",
   "roots_no_real_complex_conjugate": "No hay raíces reales (dos raíces complejas conjugadas).",
   "quadratic_initial_prompt": "Introduce los coeficientes a, b, c y haz clic en el botón.",
-  "language_switcher_label": "Idioma:"
+  "language_switcher_label": "Idioma:",
+  "footer_text": "Sitio interactivo para aprender ecuaciones lineales."
 }

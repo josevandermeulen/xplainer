@@ -21,8 +21,7 @@
   "find_equation_instructions": "Klik direct op de speciale grafiek hieronder om twee punten te definiëren. De vergelijking van de lijn die door deze punten gaat, wordt hier berekend en weergegeven.",
   "canvas_fallback_points": "Uw browser ondersteunt het canvas-element niet.",
   "equation_result_title": "Vergelijking en berekening:",
-  "footer_text": "Interactieve site om lineaire vergelijkingen te leren.",
-  "quadratic_page_title": "Verken Tweedegraadsvergelijkingen",
+  "quadratic_page_title": "Kwadratische Vergelijkingen Verkennen",
   "quadratic_main_heading": "Tweedegraadsvergelijkingen Verkennen",
   "nav_linear_equations": "Lineaire Vergelijkingen (y = ax + b)",
   "quadratic_intro_what_is": "Wat is een tweedegraadsvergelijking?",
@@ -42,11 +41,11 @@
   "quadratic_button_analyze_draw": "Analyseer en Teken Parabool",
   "quadratic_algebraic_results_title": "Analyse van de vergelijking:",
   "quadratic_canvas_fallback": "Uw browser ondersteunt het canvas-element niet.",
-  "quadratic_footer_text": "Interactieve site om wiskunde te leren.",
   "alert_invalid_values_a_b": "Voer geldige numerieke waarden in voor 'a' en 'b'.",
   "alert_line_already_drawn": "Deze lijn is al getekend. Wijzig 'a' of 'b' of wis de grafiek.",
   "equation_format_y_ax_b": "y = {a}x + {b}",
   "point_selection_first_point": "Eerste punt geselecteerd: (x: {graphX}, y: {graphY}).<br>Klik nogmaals op de grafiek om het tweede punt te kiezen.",
+  "points_selection_message": "Geselecteerde punten: (x1: {x1}, y1: {y1}) en (x2: {x2}, y2: {y2}).",
   "equation_format_vertical_line": "x = {x_value}",
   "explanation_vertical_line": "Beide punten hebben dezelfde x-coördinaat (x = {x_value}). Dit is een verticale lijn.",
   "equation_format_y_ax_b_detailed": "y = {a}x {sign} {b}",
@@ -62,5 +61,6 @@
   "roots_one_double_real": "Eén reële dubbele wortel: x₁ = x₂ = {x1}",
   "roots_no_real_complex_conjugate": "Geen reële wortels (twee complexe geconjugeerde wortels).",
   "quadratic_initial_prompt": "Voer coëfficiënten a, b, c in en klik op de knop.",
-  "language_switcher_label": "Taal:"
+  "language_switcher_label": "Taal:",
+  "footer_text": "Interactieve site om lineaire vergelijkingen te leren."
 }

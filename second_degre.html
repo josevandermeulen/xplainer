@@ -13,6 +13,15 @@
         <nav class="page-navigation">
             <a href="index.html" data-translate="nav_linear_equations">Équations Linéaires (y = ax + b)</a>
         </nav>
+        <div class="language-switcher">
+            <label for="lang-select" data-translate="language_switcher_label">Language:</label>
+            <select id="lang-select">
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="nl">Nederlands</option>
+            </select>
+        </div>
     </header>
 
     <section id="introduction-second-degre">
@@ -69,18 +78,8 @@
     </section>
 
     <footer>
-        <div class="language-switcher">
-            <label for="lang-select" data-translate="language_switcher_label">Language:</label>
-            <select id="lang-select">
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="nl">Nederlands</option>
-            </select>
-        </div>
-        <p data-translate="quadratic_footer_text">Site interactif pour apprendre les mathématiques.</p>
     </footer>
 
-    <script src="second_degre.js"></script>
+    <script src="second_degre.js" defer></script>
 </body>
 </html>
