@@ -61,6 +61,7 @@
   "roots_one_double_real": "One real double root: x₁ = x₂ = {x1}",
   "roots_no_real_complex_conjugate": "No real roots (two complex conjugate roots).",
   "quadratic_initial_prompt": "Enter coefficients a, b, c and click the button.",
+  "equation_result_title_dynamic": "Equation and calculation:",
   "language_switcher_label": "Language:",
   "footer_text": "Interactive site for learning linear equations."
 }

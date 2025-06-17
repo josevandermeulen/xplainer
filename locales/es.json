@@ -61,6 +61,7 @@
   "roots_one_double_real": "Una raíz real doble: x₁ = x₂ = {x1}",
   "roots_no_real_complex_conjugate": "No hay raíces reales (dos raíces complejas conjugadas).",
   "quadratic_initial_prompt": "Introduce los coeficientes a, b, c y haz clic en el botón.",
+  "equation_result_title_dynamic": "Ecuación y cálculo:",
   "language_switcher_label": "Idioma:",
   "footer_text": "Sitio interactivo para aprender ecuaciones lineales."
 }

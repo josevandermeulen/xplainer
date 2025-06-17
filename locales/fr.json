@@ -62,5 +62,6 @@
   "roots_one_double_real": "Une racine réelle double : x₁ = x₂ = {x1}",
   "roots_no_real_complex_conjugate": "Pas de racines réelles (deux racines complexes conjuguées).",
   "quadratic_initial_prompt": "Entrez les coefficients a, b, c et cliquez sur le bouton.",
+  "equation_result_title_dynamic": "Équation et calcul :",
   "language_switcher_label": "Langue :"
 }

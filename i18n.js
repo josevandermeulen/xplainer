@@ -55,6 +55,11 @@ async function setLanguage(lang) {
         if (oldLanguage !== currentLanguage || Object.keys(translations).length > 0) {
             applyTranslations();
             updateLangSelector(); // Update dropdown after applying translations
+
+            // Dispatch a custom event when language has changed and translations applied
+            const event = new CustomEvent('languagechanged', { detail: { language: currentLanguage } });
+            document.dispatchEvent(event);
+            console.log("Dispatched languagechanged event for:", currentLanguage);
         }
 
     } catch (error) {

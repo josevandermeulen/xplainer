@@ -44,6 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // --- VARIABLES SPÉCIFIQUES AU CANVAS 2 (pointsGraphCanvas) ---
         // La variable selectingPointsMode est supprimée
         let selectedPoints = []; // Stocke les points {x, y} en coordonnées du graphique
+        let lastPointsDisplayState = {
+            type: 'initial_prompt', // other types: 'one_point_selected', 'equation_calculated'
+            data: {} // Will store p1, p2 for equation, or single point data
+        };
 
         // --- FONCTIONS DE DESSIN GÉNÉRIQUES ---
         function clearCanvasCtx(ctx) {
@@ -174,15 +178,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // --- LOGIQUE POUR CANVAS 2 (pointsGraphCanvas) ---
+
+        function updatePointsEquationResultDisplay() {
+            if (!pointsEquationResultDiv) return;
+
+            switch (lastPointsDisplayState.type) {
+                case 'initial_prompt':
+                    pointsEquationResultDiv.innerHTML = `<p>${getString('points_graph_initial_prompt')}</p>`;
+                    break;
+                case 'one_point_selected':
+                    if (lastPointsDisplayState.data && lastPointsDisplayState.data.point1) {
+                        const p1 = lastPointsDisplayState.data.point1;
+                        pointsEquationResultDiv.innerHTML = `<p>${getString('point_selection_first_point', { graphX: p1.x, graphY: p1.y })}</p>`;
+                    }
+                    break;
+                case 'equation_calculated':
+                    if (lastPointsDisplayState.data && lastPointsDisplayState.data.point1 && lastPointsDisplayState.data.point2) {
+                        const p1 = lastPointsDisplayState.data.point1;
+                        const p2 = lastPointsDisplayState.data.point2;
+                        let equationText = "";
+                        let stepsText = "";
+
+                        let fullMessage = `<h4 class="dynamic-translation">${getString('equation_result_title_dynamic') || 'Equation and calculation:'}</h4>`;
+                        fullMessage += `<p>${getString('points_selection_message', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y })}</p>`;
+
+                        if (p1.x === p2.x) { // Vertical line
+                            equationText = `<span class="equation">${getString('equation_format_vertical_line', { x_value: p1.x })}</span>`;
+                            stepsText = `<div class="steps">${getString('explanation_vertical_line', { x_value: p1.x })}</div>`;
+                        } else {
+                            const lineA = (p2.y - p1.y) / (p2.x - p1.x);
+                            const lineB = p1.y - lineA * p1.x;
+                            const a_rounded = parseFloat(lineA.toFixed(3));
+                            const b_rounded = parseFloat(lineB.toFixed(3));
+                            equationText = `<span class="equation">${getString('equation_format_y_ax_b_detailed', { a: a_rounded, sign: (b_rounded < 0 ? '-' : '+'), b: Math.abs(b_rounded) })}</span>`;
+                            stepsText = `<div class="steps">${getString('explanation_slope_intercept', { p2y: p2.y, p1y: p1.y, p2x: p2.x, p1x: p1.x, a: a_rounded, b: b_rounded })}</div>`;
+                        }
+                        pointsEquationResultDiv.innerHTML = fullMessage + equationText + stepsText;
+                    }
+                    break;
+                default:
+                    pointsEquationResultDiv.innerHTML = `<p>${getString('points_graph_initial_prompt')}</p>`; // Default to initial prompt
+            }
+        }
+
         // Pas de bouton startPointsButton, le canvas est toujours "actif" implicitement.
         pointsCanvas.addEventListener('click', (event) => {
-            // Si 2 points ont déjà été sélectionnés (et donc une équation calculée),
-            // le prochain clic réinitialise le processus pour une nouvelle sélection.
             if (selectedPoints.length === 2) {
-                selectedPoints = []; // Vide les points pour une nouvelle sélection
-                clearCanvasCtx(pointsCtx); // Efface le canvas des points
-                drawAxes(pointsCtx);       // Redessine les axes
-                pointsEquationResultDiv.innerHTML = ""; // Vide la zone de résultat précédente
+                selectedPoints = [];
+                clearCanvasCtx(pointsCtx);
+                drawAxes(pointsCtx);
+                lastPointsDisplayState = { type: 'initial_prompt', data: {} };
+                // updatePointsEquationResultDisplay will be called at the end
             }
 
             const rect = pointsCanvas.getBoundingClientRect();
@@ -194,54 +240,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             const graphX = parseFloat(((pixelX - oX) / scale).toFixed(2));
             const graphY = parseFloat(((oY - pixelY) / scale).toFixed(2));
 
-            selectedPoints.push({ x: graphX, y: graphY });
             drawPoint(pointsCtx, graphX, graphY); // Dessine le point cliqué
 
-            if (selectedPoints.length === 1) {
-                pointsEquationResultDiv.innerHTML = `<p>${getString('point_selection_first_point', { graphX: graphX, graphY: graphY })}</p>`;
-            } else if (selectedPoints.length === 2) {
-                const [p1, p2] = selectedPoints;
-                // Met à jour le message pour inclure les deux points avant le calcul
-                // This message is temporary and overwritten by calculateAndDisplayEquationOnCanvas2, so no need to translate this exact temporary string.
-                // However, the structure of calculateAndDisplayEquationOnCanvas2 will be updated.
-                pointsEquationResultDiv.innerHTML = `<p>Points sélectionnés : (x1: ${p1.x}, y1: ${p1.y}) et (x2: ${p2.x}, y2: ${p2.y}).</p>`; // Keeping this as is, as it's immediately replaced.
-                calculateAndDisplayEquationOnCanvas2(p1, p2);
-                // Les points et la droite restent visibles. Le prochain clic effacera (géré au début de cet écouteur).
+            if (selectedPoints.length === 0) { // Just became the first point
+                selectedPoints.push({ x: graphX, y: graphY });
+                lastPointsDisplayState = { type: 'one_point_selected', data: { point1: { x: graphX, y: graphY } } };
+            } else if (selectedPoints.length === 1) { // Just became the second point
+                const p1_actual = selectedPoints[0];
+                const p2_actual = { x: graphX, y: graphY };
+                selectedPoints.push(p2_actual); // Add to selectedPoints array for consistency if needed elsewhere
+                lastPointsDisplayState = { type: 'equation_calculated', data: { point1: p1_actual, point2: p2_actual } };
+                drawEquationLineOnCanvas2(p1_actual, p2_actual);
             }
+            updatePointsEquationResultDisplay();
         });
 
-        function calculateAndDisplayEquationOnCanvas2(p1, p2) {
-            let equationText = "";
-            let stepsText = "";
-            let lineA, lineB;
-
-            // The initial message with point coordinates is set by the caller,
-            // and it's a temporary message. We'll build the full translated message here.
-            let initialMessage = `<p>${getString('points_selection_message', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y })}</p>`;
-
-
-            if (p1.x === p2.x) {
-                equationText = `<span class="equation">${getString('equation_format_vertical_line', { x_value: p1.x })}</span>`;
-                stepsText = `<div class="steps">${getString('explanation_vertical_line', { x_value: p1.x })}</div>`;
+        function drawEquationLineOnCanvas2(p1, p2) {
+            if (p1.x === p2.x) { // Vertical line
                 pointsCtx.beginPath();
                 pointsCtx.strokeStyle = 'purple';
                 pointsCtx.lineWidth = 2;
-                const canvasP1X = pointsCtx.canvas.width/2 + p1.x * scale;
+                const canvasP1X = pointsCtx.canvas.width / 2 + p1.x * scale;
                 pointsCtx.moveTo(canvasP1X, 0);
                 pointsCtx.lineTo(canvasP1X, pointsCtx.canvas.height);
                 pointsCtx.stroke();
-            } else {
-                lineA = (p2.y - p1.y) / (p2.x - p1.x);
-                lineB = p1.y - lineA * p1.x;
-                const a_rounded = parseFloat(lineA.toFixed(3));
-                const b_rounded = parseFloat(lineB.toFixed(3));
-                equationText = `<span class="equation">${getString('equation_format_y_ax_b_detailed', { a: a_rounded, sign: (b_rounded < 0 ? '-' : '+'), b: Math.abs(b_rounded) })}</span>`;
-                stepsText = `<div class="steps">${getString('explanation_slope_intercept', { p2y: p2.y, p1y: p1.y, p2x: p2.x, p1x: p1.x, a: a_rounded, b: b_rounded })}</div>`;
+            } else { // Normal line
+                const lineA = (p2.y - p1.y) / (p2.x - p1.x);
+                const lineB = p1.y - lineA * p1.x;
                 drawSingleLine(pointsCtx, lineA, lineB, 'purple');
             }
-            // The initialMessage part is already set by the caller if selectedPoints.length === 2
-            // We append the new equation and steps.
-            pointsEquationResultDiv.innerHTML = initialMessage + equationText + stepsText;
         }
 
         // --- INITIALISATION ---
@@ -250,12 +277,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             drawAxes(linesCtx);
             clearCanvasCtx(pointsCtx);
             drawAxes(pointsCtx);
+            lastPointsDisplayState = { type: 'initial_prompt', data: {} };
+            updatePointsEquationResultDisplay();
             // Le curseur pour pointsCanvas est maintenant géré par CSS.
-            // Si un message initial est souhaité pour pointsEquationResultDiv :
-            pointsEquationResultDiv.innerHTML = `<p>${getString('points_graph_initial_prompt')}</p>`;
         }
 
         init();
+
+        // Event listener for language change
+        document.addEventListener('languagechanged', () => {
+            console.log("script.js: languagechanged event detected.");
+            updatePointsEquationResultDisplay();
+            if (typeof updateEquationsListDisplay === 'function') {
+                updateEquationsListDisplay();
+            }
+        });
+
     } catch (error) {
         console.error("Error initializing script:", error);
     }

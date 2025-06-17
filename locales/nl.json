@@ -61,6 +61,7 @@
   "roots_one_double_real": "Eén reële dubbele wortel: x₁ = x₂ = {x1}",
   "roots_no_real_complex_conjugate": "Geen reële wortels (twee complexe geconjugeerde wortels).",
   "quadratic_initial_prompt": "Voer coëfficiënten a, b, c in en klik op de knop.",
+  "equation_result_title_dynamic": "Vergelijking en berekening:",
   "language_switcher_label": "Taal:",
   "footer_text": "Interactieve site om lineaire vergelijkingen te leren."
 }
