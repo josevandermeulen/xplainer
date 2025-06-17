@@ -149,17 +149,36 @@ footer {
 }
 
 /* Styles pour le sélecteur de langue */
-.language-switcher {
-    padding: 5px;
+header > div.language-switcher {
+    display: block;
     position: absolute;
     top: 15px;
     right: 20px;
+    padding: 5px;
+    margin: 0;
+    text-align: left;
 }
 
-.language-switcher label {
+/* Make sure the label inside the switcher behaves as expected */
+header > div.language-switcher label {
     margin-right: 5px;
+    display: inline-block; /* Or block if you want it on its own line */
 }
 
+/* Style the select element specifically within the header's language switcher */
+header > div.language-switcher select {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--light-text); /* Assuming light text on primary color background */
+    color: var(--text-color); /* Dark text for readability on light background */
+}
+
+header > div.language-switcher select:hover {
+    border-color: var(--secondary-color); /* Consistent hover effect */
+}
+
+/* Keep footer styles separate and as they were, unless they also need adjustment */
 footer .language-switcher select {
     padding: 6px 12px;
     border-radius: 4px;
